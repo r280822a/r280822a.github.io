@@ -43,14 +43,14 @@
                 max-width: 800px;
                 margin: 0 auto;
             }
-            .exercise-card {
+            .challenge-card {
                 background: var(--card-bg);
                 border-radius: 8px;
                 padding: 20px;
                 margin-bottom: 30px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-            .exercise-card h2 {
+            .challenge-card h2 {
                 margin-top: 0;
                 border-bottom: 2px solid var(--secondary);
                 padding-bottom: 10px;
@@ -164,136 +164,74 @@
                 <p>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</p>
             </header>
 
-
-            <div class="exercise-card">
-                <h2>Challenge 1</h2>
-                <p><strong>Goal:</strong> Reduce this 5 line program to just 2 lines.</p>
-                <div class="code-container">
-                    <pre><code>
-print("Hello World")
-print("Hello World")
-print("Hello World")
-print("Hello World")
-print("Hello World")
-                    </code></pre>
-                </div>
-
-                <p>Your attempt:</p>
-                <div class="editor-wrapper">
-                    <div id="line-numbers-1" class="line-numbers">1</div>
-                    <textarea id="code-1" oninput="updateLineNumbers(1)" placeholder="Type your Python code here..."></textarea>
-                </div>
-                <div class="button-group">
-                    <button class="run-btn" onclick="runPython(1)">▶ Run Code</button>
-                    <button onclick="document.getElementById('sol-1').classList.toggle('visible')">Show / Hide Solution</button>
-                </div>
-                <p><strong>Output:</strong></p>
-                <div id="output-1" class="output-console"></div>
-
-                <div id="sol-1" class="solution">
-                    <p><strong>Solution:</strong> Use a FOR loop instead of repeating the code!</p>
-                    <div class="code-container">
-                        <pre><code>
-for i in range(5):
-    print("Hello World")
-                        </code></pre>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="exercise-card">
-                <h2>Challenge 2</h2>
-                <p><strong>Goal:</strong> You don't need to reduce the number of lines in this code but do you notice the mistake?</p>
-                <div class="code-container">
-                    <pre><code>
-coins = 60
-if coins >= 50:
-    print("True")
-elif coins < 50:
-    print("False")
-                    </code></pre>
-                </div>
-
-                <p>Your attempt:</p>
-                <div class="editor-wrapper">
-                    <div id="line-numbers-2" class="line-numbers">1</div>
-                    <textarea id="code-2" oninput="updateLineNumbers(2)" placeholder="Type your Python code here..."></textarea>
-                </div>
-                <div class="button-group">
-                    <button class="run-btn" onclick="runPython(2)">▶ Run Code</button>
-                    <button onclick="document.getElementById('sol-2').classList.toggle('visible')">Show / Hide Solution</button>
-                </div>
-                <p><strong>Output:</strong></p>
-                <div id="output-2" class="output-console"></div>
-
-                <div id="sol-2" class="solution">
-                    <p><strong>Solution:</strong> If `coins >= 50` is false then coins must be less than 50. So no need for an else if, just use a regular else statement:</p>
-                    <div class="code-container">
-                        <pre><code>
-coins = 60
-if coins >= 50:
-    print("True")
-else:
-    print("False")
-                        </code></pre>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="exercise-card">
-                <h2>Challenge 3</h2>
-                <p><strong>Goal:</strong> Reduce this 5 line program to just 3 lines.</p>
-                <div class="code-container">
-                    <pre><code>
-numbers = [5, 10, 15, 20]
-total = 0
-for num in numbers:
-    total = total + num
-print(total)
-                    </code></pre>
-                </div>
-
-                <p>Your attempt:</p>
-                <div class="editor-wrapper">
-                    <div id="line-numbers-3" class="line-numbers">1</div>
-                    <textarea id="code-3" oninput="updateLineNumbers(2)" placeholder="Type your Python code here..."></textarea>
-                </div>
-                <div class="button-group">
-                    <button class="run-btn" onclick="runPython(3)">▶ Run Code</button>
-                    <button onclick="document.getElementById('sol-3').classList.toggle('visible')">Show / Hide Solution</button>
-                </div>
-                <p><strong>Output:</strong></p>
-                <div id="output-3" class="output-console"></div>
-
-                <div id="sol-3" class="solution">
-                    <p><strong>Solution:</strong> Python has built-in functions that do the heavy lifting for you. Use `sum()` here.</p>
-                    <div class="code-container">
-                        <pre><code>
-numbers = [5, 10, 15, 20]
-total = sum(numbers)
-print(total)
-                        </code></pre>
-                    </div>
-                </div>
-            </div>
+            <div id="challenge-list"></div>
         </div>
 
         <script>
+            // 1. Fetch the challenges from the JSON file
+            async function loadChallenges() {
+                try {
+                    const response = await fetch('challenges.json');
+                    const challenges = await response.json();
+                    console.log(response);
+                    renderChallenges(challenges);
+                } catch (error) {
+                    console.error("Error loading challenges:", error);
+                }
+            }
+
+            // 2. Build the HTML for each card dynamically
+            function renderChallenges(challenges) {
+                const container = document.getElementById('challenge-list');
+
+                challenges.forEach(ch => {
+                    const card = document.createElement('div');
+                    card.className = 'challenge-card';
+                    card.innerHTML = `
+                        <h2>${ch.title}</h2>
+                        <p><strong>Goal:</strong> ${ch.goal}</p>
+                        <div class="code-container">
+                            <pre><code>${ch.startingCode}</code></pre>
+                        </div>
+
+                        <p>Your attempt:</p>
+                        <div class="editor-wrapper">
+                            <div id="line-numbers-${ch.id}" class="line-numbers">1</div>
+                            <textarea id="code-${ch.id}" oninput="updateLineNumbers(${ch.id})" placeholder="Type your code here..."></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="run-btn" onclick="runPython(${ch.id})">▶ Run Code</button>
+                            <button onclick="document.getElementById('sol-${ch.id}').classList.toggle('visible')">Show / Hide Solution</button>
+                        </div>
+
+                        <p><strong>Output:</strong></p>
+                        <div id="output-${ch.id}" class="output-console"></div>
+
+                        <div id="sol-${ch.id}" class="solution">
+                            <p><strong>Solution:</strong> ${ch.solutionDesc}</p>
+                            <div class="code-container">
+                                <pre><code>${ch.solutionCode}</code></pre>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+
+                    // Set up indentation and line numbers for the new textarea
+                    const textarea = card.querySelector('textarea');
+                    enableTabIndentation(textarea);
+                    updateLineNumbers(ch.id);
+                });
+            }
+
+
             // Updates the line numbers on the side based on textarea content
             function updateLineNumbers(id) {
                 const textarea = document.getElementById(`code-${id}`);
                 const lineNumbers = document.getElementById(`line-numbers-${id}`);
+                if(!textarea || !lineNumbers) return;
                 const lines = textarea.value.split('\n').length;
-
-                let lineNumbersHTML = '';
-                for (let i = 1; i <= lines; i++) {
-                    lineNumbersHTML += i + '<br>';
-                }
-                lineNumbers.innerHTML = lineNumbersHTML;
-
-                // So textarea height syncs with line-numbers
+                lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
                 textarea.style.height = "auto";
             }
 
@@ -302,38 +240,26 @@ print(total)
                 textarea.addEventListener('keydown', function(e) {
                     if (e.key === 'Tab') {
                         e.preventDefault(); // Stop focus from moving to next element
-                        
                         const start = this.selectionStart;
                         const end = this.selectionEnd;
 
                         // Set textarea value to: text before caret + 4 spaces + text after caret
                         this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
-
                         // Put caret in right position (after the indent)
                         this.selectionStart = this.selectionEnd = start + 4;
                     }
                 });
             }
-            window.onload = function() {
-                const textareas = document.querySelectorAll('textarea');
-                textareas.forEach(textarea => {
-                    enableTabIndentation(textarea);
-                    // Initialize line numbers for existing text
-                    const id = textarea.id.split('-')[1];
-                    updateLineNumbers(id);
-                });
-            };
 
             // Runs the Python code using Skulpt
-            function runPython(exerciseId) {
-                const code = document.getElementById(`code-${exerciseId}`).value;
-                const outputConsole = document.getElementById(`output-${exerciseId}`);
-                
+            function runPython(challengeId) {
+                const code = document.getElementById(`code-${challengeId}`).value;
+                const outputConsole = document.getElementById(`output-${challengeId}`);
                 // Clear previous output
                 outputConsole.innerHTML = ""; 
 
                 // Configure Skulpt to intercept 'print' statements and errors
-                Sk.pre = `output-${exerciseId}`;
+                Sk.pre = `output-${challengeId}`;
                 Sk.configure({
                     output: function(text) {
                         // Append output to the specific console
@@ -365,6 +291,10 @@ print(total)
                     }
                 );
             }
+
+
+            // Initialize on load
+            window.onload = loadChallenges;
         </script>
     </body>
 </html>
