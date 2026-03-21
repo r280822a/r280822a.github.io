@@ -3,7 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Python Code Challenges</title>
+        <title>Code Challenges</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
         <style>
             :root {
                 --primary: #0056b3;
@@ -13,6 +17,8 @@
                 --text-color: #333;
                 --code-bg: #1e1e1e;
                 --code-text: #d4d4d4;
+                --console-bg: #000;
+                --console-text: #0f0;
             }
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -67,6 +73,12 @@
                 font-family: 'Courier New', Courier, monospace;
                 box-sizing: border-box;
                 resize: vertical;
+                margin-bottom: 10px;
+            }
+            .button-group {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
             }
             button {
                 background-color: var(--primary);
@@ -76,11 +88,18 @@
                 border-radius: 5px;
                 cursor: pointer;
                 font-size: 16px;
+                font-weight: bold;
                 margin-top: 10px;
                 transition: background-color 0.3s ease;
             }
             button:hover {
                 background-color: #004494;
+            }
+            button.run-btn {
+                background-color: #28a745;
+            }
+            button.run-btn:hover {
+                background-color: #218838;
             }
             .solution {
                 display: none;
@@ -92,6 +111,17 @@
             }
             .solution.visible {
                 display: block;
+            }
+
+            .output-console {
+                background-color: var(--console-bg);
+                color: var(--console-text);
+                padding: 10px;
+                border-radius: 5px;
+                font-family: 'Courier New', Courier, monospace;
+                min-height: 40px;
+                white-space: pre-wrap;
+                margin-bottom: 15px;
             }
         </style>
     </head>
@@ -114,8 +144,15 @@ print("Hello World")
                     </code></pre>
                 </div>
                 <p>Your attempt:</p>
-                <textarea placeholder="Type your code here..."></textarea>
-                <button onclick="toggleSolution('sol1')">Show / Hide Solution</button>
+                <textarea id="code-1" placeholder="Type your Python code here..."></textarea>
+        
+                <div class="button-group">
+                    <button class="run-btn" onclick="runPython(1)">▶ Run Code</button>
+                    <button onclick="toggleSolution('sol1')">Show / Hide Solution</button>
+                </div>
+                
+                <p><strong>Output:</strong></p>
+                <div id="output-1" class="output-console"></div>
                 <div id="sol1" class="solution">
                     <p><strong>Solution:</strong> Use a FOR loop instead of repeating the code!</p>
                     <div class="code-container">
@@ -133,23 +170,30 @@ for i in range(5):
                     <pre><code>
 coins = 60
 if coins >= 50:
-    return True
-else if coins < 50:
-    return False
+    print("True")
+elif coins < 50:
+    print("False")
                     </code></pre>
                 </div>
                 <p>Your attempt:</p>
-                <textarea placeholder="Type your code here..."></textarea>
-                <button onclick="toggleSolution('sol2')">Show / Hide Solution</button>
+                <textarea id="code-2" placeholder="Type your Python code here..."></textarea>
+        
+                <div class="button-group">
+                    <button class="run-btn" onclick="runPython(2)">▶ Run Code</button>
+                    <button onclick="toggleSolution('sol2')">Show / Hide Solution</button>
+                </div>
+                
+                <p><strong>Output:</strong></p>
+                <div id="output-2" class="output-console"></div>
                 <div id="sol2" class="solution">
                     <p><strong>Solution:</strong> If `coins >= 50` is false then coins must be less than 50. So no need for an else if, just use a regular else statement:</p>
                     <div class="code-container">
                         <pre><code>
 coins = 60
 if coins >= 50:
-    return True
+    print("True")
 else:
-    return False
+    print("False")
                         </code></pre>
                     </div>
                 </div>
@@ -167,8 +211,15 @@ print(total)
                     </code></pre>
                 </div>
                 <p>Your attempt:</p>
-                <textarea placeholder="Type your code here..."></textarea>
-                <button onclick="toggleSolution('sol3')">Show / Hide Solution</button>
+                <textarea id="code-3" placeholder="Type your Python code here..."></textarea>
+        
+                <div class="button-group">
+                    <button class="run-btn" onclick="runPython(3)">▶ Run Code</button>
+                    <button onclick="toggleSolution('sol3')">Show / Hide Solution</button>
+                </div>
+                
+                <p><strong>Output:</strong></p>
+                <div id="output-3" class="output-console"></div>
                 <div id="sol3" class="solution">
                     <p><strong>Solution:</strong> Python has built-in functions that do the heavy lifting for you. Use `sum()` here.</p>
                     <div class="code-container">
@@ -189,6 +240,48 @@ print(sum(numbers))
                 } else {
                     solutionDiv.classList.add('visible');
                 }
+            }
+
+            // Runs the Python code using Skulpt
+            function runPython(exerciseId) {
+                const code = document.getElementById(`code-${exerciseId}`).value;
+                const outputConsole = document.getElementById(`output-${exerciseId}`);
+                
+                // Clear previous output
+                outputConsole.innerHTML = ""; 
+
+                // Configure Skulpt to intercept 'print' statements and errors
+                Sk.pre = `output-${exerciseId}`;
+                Sk.configure({
+                    output: function(text) {
+                        // Append output to the specific console
+                        outputConsole.innerHTML += text; 
+                    },
+                    read: function(x) {
+                        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
+                            throw "File not found: '" + x + "'";
+                        }
+                        return Sk.builtinFiles["files"][x];
+                    }
+                });
+
+                // Run the code asynchronously
+                const myPromise = Sk.misceval.asyncToPromise(function() {
+                    return Sk.importMainWithBody("<stdin>", false, code, true);
+                });
+
+                myPromise.then(
+                    function(mod) {
+                        // Code finished successfully
+                        if (outputConsole.innerHTML === "") {
+                            outputConsole.innerHTML = "Program finished. (No output to display)";
+                        }
+                    },
+                    function(err) {
+                        // Print error in red
+                        outputConsole.innerHTML = `<span style="color: #ff4d4d;">${err.toString()}</span>`;
+                    }
+                );
             }
         </script>
     </body>
