@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Code Challenges</title>
+        <title>Python Code Challenges</title>
 
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
@@ -19,7 +19,10 @@
                 --code-text: #d4d4d4;
                 --console-bg: #000;
                 --console-text: #0f0;
+                --gutter-bg: #f0f0f0;
+                --gutter-text: #999;
             }
+
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--bg-color);
@@ -35,6 +38,7 @@
             h1 {
                 color: var(--primary);
             }
+
             .container {
                 max-width: 800px;
                 margin: 0 auto;
@@ -63,18 +67,44 @@
             pre {
                 margin: 0px;
             }
-            textarea {
-                width: 100%;
-                height: 100px;
-                background-color: #fafafa;
+
+            /* Code editor layout */
+            .editor-wrapper {
+                display: flex;
                 border: 1px solid #ccc;
                 border-radius: 5px;
-                padding: 10px;
-                font-family: 'Courier New', Courier, monospace;
-                box-sizing: border-box;
-                resize: vertical;
+                background-color: #fafafa;
+                overflow: hidden;
                 margin-bottom: 10px;
             }
+            .line-numbers {
+                width: 35px;
+                padding: 10px 5px;
+                text-align: right;
+                background-color: var(--gutter-bg);
+                color: var(--gutter-text);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 14px;
+                line-height: 20px; /* Must match textarea line-height */
+                user-select: none;
+                border-right: 1px solid #ddd;
+            }
+            textarea {
+                flex: 1;
+                height: auto;
+                border: none;
+                padding: 10px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 14px;
+                line-height: 20px; /* Must match line-numbers line-height */
+                box-sizing: border-box;
+                resize: vertical;
+                outline: none;
+                background: transparent;
+                white-space: pre;
+                overflow-x: auto;
+            }
+
             .button-group {
                 display: flex;
                 gap: 10px;
@@ -101,6 +131,7 @@
             button.run-btn:hover {
                 background-color: #218838;
             }
+
             .solution {
                 display: none;
                 margin-top: 15px;
@@ -125,15 +156,18 @@
             }
         </style>
     </head>
+
     <body>
         <div class="container">
             <header>
                 <h1>Python Code Challenges</h1>
                 <p>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</p>
             </header>
+
+
             <div class="exercise-card">
                 <h2>Challenge 1</h2>
-                <p><strong>Goal:</strong> Reduce this 5-line program to just 2 lines.</p>
+                <p><strong>Goal:</strong> Reduce this 5 line program to just 2 lines.</p>
                 <div class="code-container">
                     <pre><code>
 print("Hello World")
@@ -143,17 +177,20 @@ print("Hello World")
 print("Hello World")
                     </code></pre>
                 </div>
+
                 <p>Your attempt:</p>
-                <textarea id="code-1" placeholder="Type your Python code here..."></textarea>
-        
+                <div class="editor-wrapper">
+                    <div id="line-numbers-1" class="line-numbers">1</div>
+                    <textarea id="code-1" oninput="updateLineNumbers(1)" placeholder="Type your Python code here..."></textarea>
+                </div>
                 <div class="button-group">
                     <button class="run-btn" onclick="runPython(1)">▶ Run Code</button>
-                    <button onclick="toggleSolution('sol1')">Show / Hide Solution</button>
+                    <button onclick="document.getElementById('sol-1').classList.toggle('visible')">Show / Hide Solution</button>
                 </div>
-                
                 <p><strong>Output:</strong></p>
                 <div id="output-1" class="output-console"></div>
-                <div id="sol1" class="solution">
+
+                <div id="sol-1" class="solution">
                     <p><strong>Solution:</strong> Use a FOR loop instead of repeating the code!</p>
                     <div class="code-container">
                         <pre><code>
@@ -163,6 +200,8 @@ for i in range(5):
                     </div>
                 </div>
             </div>
+
+
             <div class="exercise-card">
                 <h2>Challenge 2</h2>
                 <p><strong>Goal:</strong> You don't need to reduce the number of lines in this code but do you notice the mistake?</p>
@@ -175,17 +214,20 @@ elif coins < 50:
     print("False")
                     </code></pre>
                 </div>
+
                 <p>Your attempt:</p>
-                <textarea id="code-2" placeholder="Type your Python code here..."></textarea>
-        
+                <div class="editor-wrapper">
+                    <div id="line-numbers-2" class="line-numbers">1</div>
+                    <textarea id="code-2" oninput="updateLineNumbers(2)" placeholder="Type your Python code here..."></textarea>
+                </div>
                 <div class="button-group">
                     <button class="run-btn" onclick="runPython(2)">▶ Run Code</button>
-                    <button onclick="toggleSolution('sol2')">Show / Hide Solution</button>
+                    <button onclick="document.getElementById('sol-2').classList.toggle('visible')">Show / Hide Solution</button>
                 </div>
-                
                 <p><strong>Output:</strong></p>
                 <div id="output-2" class="output-console"></div>
-                <div id="sol2" class="solution">
+
+                <div id="sol-2" class="solution">
                     <p><strong>Solution:</strong> If `coins >= 50` is false then coins must be less than 50. So no need for an else if, just use a regular else statement:</p>
                     <div class="code-container">
                         <pre><code>
@@ -198,9 +240,11 @@ else:
                     </div>
                 </div>
             </div>
+
+
             <div class="exercise-card">
                 <h2>Challenge 3</h2>
-                <p><strong>Goal:</strong> Reduce this 5-line program to just 2 lines.</p>
+                <p><strong>Goal:</strong> Reduce this 5 line program to just 3 lines.</p>
                 <div class="code-container">
                     <pre><code>
 numbers = [5, 10, 15, 20]
@@ -210,22 +254,26 @@ for num in numbers:
 print(total)
                     </code></pre>
                 </div>
+
                 <p>Your attempt:</p>
-                <textarea id="code-3" placeholder="Type your Python code here..."></textarea>
-        
+                <div class="editor-wrapper">
+                    <div id="line-numbers-3" class="line-numbers">1</div>
+                    <textarea id="code-3" oninput="updateLineNumbers(2)" placeholder="Type your Python code here..."></textarea>
+                </div>
                 <div class="button-group">
                     <button class="run-btn" onclick="runPython(3)">▶ Run Code</button>
-                    <button onclick="toggleSolution('sol3')">Show / Hide Solution</button>
+                    <button onclick="document.getElementById('sol-3').classList.toggle('visible')">Show / Hide Solution</button>
                 </div>
-                
                 <p><strong>Output:</strong></p>
                 <div id="output-3" class="output-console"></div>
-                <div id="sol3" class="solution">
+
+                <div id="sol-3" class="solution">
                     <p><strong>Solution:</strong> Python has built-in functions that do the heavy lifting for you. Use `sum()` here.</p>
                     <div class="code-container">
                         <pre><code>
 numbers = [5, 10, 15, 20]
-print(sum(numbers))
+total = sum(numbers)
+print(total)
                         </code></pre>
                     </div>
                 </div>
@@ -233,14 +281,48 @@ print(sum(numbers))
         </div>
 
         <script>
-            function toggleSolution(id) {
-                const solutionDiv = document.getElementById(id);
-                if (solutionDiv.classList.contains('visible')) {
-                    solutionDiv.classList.remove('visible');
-                } else {
-                    solutionDiv.classList.add('visible');
+            // Updates the line numbers on the side based on textarea content
+            function updateLineNumbers(id) {
+                const textarea = document.getElementById(`code-${id}`);
+                const lineNumbers = document.getElementById(`line-numbers-${id}`);
+                const lines = textarea.value.split('\n').length;
+
+                let lineNumbersHTML = '';
+                for (let i = 1; i <= lines; i++) {
+                    lineNumbersHTML += i + '<br>';
                 }
+                lineNumbers.innerHTML = lineNumbersHTML;
+
+                // So textarea height syncs with line-numbers
+                textarea.style.height = "auto";
             }
+
+            // Pressing tab in textarea indents line
+            function enableTabIndentation(textarea) {
+                textarea.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        e.preventDefault(); // Stop focus from moving to next element
+                        
+                        const start = this.selectionStart;
+                        const end = this.selectionEnd;
+
+                        // Set textarea value to: text before caret + 4 spaces + text after caret
+                        this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+
+                        // Put caret in right position (after the indent)
+                        this.selectionStart = this.selectionEnd = start + 4;
+                    }
+                });
+            }
+            window.onload = function() {
+                const textareas = document.querySelectorAll('textarea');
+                textareas.forEach(textarea => {
+                    enableTabIndentation(textarea);
+                    // Initialize line numbers for existing text
+                    const id = textarea.id.split('-')[1];
+                    updateLineNumbers(id);
+                });
+            };
 
             // Runs the Python code using Skulpt
             function runPython(exerciseId) {
