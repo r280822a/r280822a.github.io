@@ -1,10 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Page Title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Python Code Challenges</title>
+        <style>
+            :root {
+                --primary: #0056b3;
+                --secondary: #dbeafe;
+                --bg-color: #f4f4f9;
+                --card-bg: #fff;
+                --text-color: #333;
+                --code-bg: #1e1e1e;
+                --code-text: #d4d4d4;
+            }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                line-height: 1.6;
+                margin: 0;
+                padding: 20px;
+            }
+            header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            h1 {
+                color: var(--primary);
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .exercise-card {
+                background: var(--card-bg);
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 30px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            .exercise-card h2 {
+                margin-top: 0;
+                border-bottom: 2px solid var(--secondary);
+                padding-bottom: 10px;
+            }
+            .code-container {
+                background-color: var(--code-bg);
+                color: var(--code-text);
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+                font-family: 'Courier New', Courier, monospace;
+                margin: 15px 0;
+            }
+            pre {
+                margin: 0px;
+            }
+            textarea {
+                width: 100%;
+                height: 100px;
+                background-color: #fafafa;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                font-family: 'Courier New', Courier, monospace;
+                box-sizing: border-box;
+                resize: vertical;
+            }
+            button {
+                background-color: var(--primary);
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
+            }
+            button:hover {
+                background-color: #004494;
+            }
+            .solution {
+                display: none;
+                margin-top: 15px;
+                padding: 15px;
+                background-color: var(--secondary);
+                border-left: 4px solid var(--primary);
+                border-radius: 0 5px 5px 0;
+            }
+            .solution.visible {
+                display: block;
+            }
+        </style>
     </head>
     <body>
-        <h1>My First Heading</h1>
-        <p>My first paragraph.</p>
+        <div class="container">
+            <header>
+                <h1>Python Code Challenges</h1>
+                <p>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</p>
+            </header>
+            <div class="exercise-card">
+                <h2>Challenge 1</h2>
+                <p><strong>Goal:</strong> Reduce this 5-line program to just 2 lines.</p>
+                <div class="code-container">
+                    <pre><code>
+print("Hello World")
+print("Hello World")
+print("Hello World")
+print("Hello World")
+print("Hello World")
+                    </code></pre>
+                </div>
+                <p>Your attempt:</p>
+                <textarea placeholder="Type your code here..."></textarea>
+                <button onclick="toggleSolution('sol1')">Show / Hide Solution</button>
+                <div id="sol1" class="solution">
+                    <p><strong>Solution:</strong> Use a FOR loop instead of repeating the code!</p>
+                    <div class="code-container">
+                        <pre><code>
+for i in range(5):
+    print("Hello World")
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-card">
+                <h2>Challenge 2</h2>
+                <p><strong>Goal:</strong> You don't need to reduce the number of lines in this code but do you notice the mistake?</p>
+                <div class="code-container">
+                    <pre><code>
+coins = 60
+if coins >= 50:
+    return True
+else if coins < 50:
+    return False
+                    </code></pre>
+                </div>
+                <p>Your attempt:</p>
+                <textarea placeholder="Type your code here..."></textarea>
+                <button onclick="toggleSolution('sol2')">Show / Hide Solution</button>
+                <div id="sol2" class="solution">
+                    <p><strong>Solution:</strong> If `coins >= 50` is false then coins must be less than 50. So no need for an else if, just use a regular else statement:</p>
+                    <div class="code-container">
+                        <pre><code>
+coins = 60
+if coins >= 50:
+    return True
+else:
+    return False
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-card">
+                <h2>Challenge 3</h2>
+                <p><strong>Goal:</strong> Reduce this 5-line program to just 2 lines.</p>
+                <div class="code-container">
+                    <pre><code>
+numbers = [5, 10, 15, 20]
+total = 0
+for num in numbers:
+    total = total + num
+print(total)
+                    </code></pre>
+                </div>
+                <p>Your attempt:</p>
+                <textarea placeholder="Type your code here..."></textarea>
+                <button onclick="toggleSolution('sol3')">Show / Hide Solution</button>
+                <div id="sol3" class="solution">
+                    <p><strong>Solution:</strong> Python has built-in functions that do the heavy lifting for you. Use `sum()` here.</p>
+                    <div class="code-container">
+                        <pre><code>
+numbers = [5, 10, 15, 20]
+print(sum(numbers))
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleSolution(id) {
+                const solutionDiv = document.getElementById(id);
+                if (solutionDiv.classList.contains('visible')) {
+                    solutionDiv.classList.remove('visible');
+                } else {
+                    solutionDiv.classList.add('visible');
+                }
+            }
+        </script>
     </body>
 </html>
