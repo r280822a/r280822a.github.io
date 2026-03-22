@@ -7,6 +7,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
         <style>
             :root {
@@ -171,9 +172,9 @@
             // 1. Fetch the challenges from the JSON file
             async function loadChallenges() {
                 try {
-                    const response = await fetch('challenges.json');
-                    const challenges = await response.json();
-                    console.log(response);
+                    const response = await fetch('challenges.yaml');
+                    const yamlText = await response.text();
+                    const challenges = jsyaml.load(yamlText); 
                     renderChallenges(challenges);
                 } catch (error) {
                     console.error("Error loading challenges:", error);
