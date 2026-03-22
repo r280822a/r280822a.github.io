@@ -31,7 +31,7 @@
 
 - id: 3
   title: "Challenge 3"
-  goal: "Reduce this 5 line program to just 3 lines."
+  goal: "Reduce this 5 line program to just 3 lines using built-in functions."
   solutionDesc: "Python has built-in functions that do the heavy lifting for you. Use `sum()` here."
   startingCode: |
     numbers = [5, 10, 15, 20]
