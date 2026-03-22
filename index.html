@@ -15,13 +15,15 @@
                 --secondary: #dbeafe;
                 --bg-color: #f4f4f9;
                 --card-bg: #fff;
-                --text-color: #333;
+                --text-color: black;
                 --code-bg: #1e1e1e;
                 --code-text: #d4d4d4;
                 --console-bg: #000;
                 --console-text: #0f0;
+                --editor-bg: #fafafa;
+                --editor-border: #ccc;
                 --gutter-bg: #f0f0f0;
-                --gutter-text: #999;
+                --gutter-text: dimgray;
                 --success: #28a745;
                 --warning: #ffc107;
             }
@@ -50,7 +52,6 @@
                 font-size: 0.85rem;
                 font-weight: bold;
                 background-color: var(--warning);
-                color: #000;
                 margin-bottom: 15px;
                 transition: all 0.5s ease;
             }
@@ -90,9 +91,9 @@
 
             .editor-wrapper {
                 display: flex;
-                border: 1px solid #ccc;
+                border: 1px solid var(--editor-border);
                 border-radius: 5px;
-                background-color: #fafafa;
+                background-color: var(--editor-bg);
                 overflow: hidden;
                 margin-bottom: 10px;
             }
@@ -106,7 +107,7 @@
                 font-size: 14px;
                 line-height: 20px;
                 user-select: none;
-                border-right: 1px solid #ddd;
+                border-right: 1px solid var(--editor-border);
             }
             textarea {
                 flex: 1;
@@ -145,7 +146,7 @@
                 background-color: #004494;
             }
             button.run-btn {
-                background-color: #28a745;
+                background-color: var(--success);
             }
             button.run-btn:hover {
                 background-color: #218838;
@@ -339,7 +340,7 @@
                     },
                     function(err) {
                         // Print error in red
-                        outputConsole.innerHTML = `<span style="color: #ff4d4d;">${err.toString()}</span>`;
+                        outputConsole.innerHTML = `<span style="color: red;">${err.toString()}</span>`;
                     }
                 );
             }
