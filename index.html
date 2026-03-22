@@ -22,6 +22,8 @@
                 --console-text: #0f0;
                 --gutter-bg: #f0f0f0;
                 --gutter-text: #999;
+                --success: #28a745;
+                --warning: #ffc107;
             }
 
             body {
@@ -38,6 +40,23 @@
             }
             h1 {
                 color: var(--primary);
+                margin-bottom: 10px;
+            }
+
+            #status-badge {
+                display: inline-block;
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: bold;
+                background-color: var(--warning);
+                color: #000;
+                margin-bottom: 15px;
+                transition: all 0.5s ease;
+            }
+            #status-badge.ready {
+                background-color: var(--success);
+                color: white;
             }
 
             .container {
@@ -51,7 +70,7 @@
                 margin-bottom: 30px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-            .challenge-card h2 {
+            h2 {
                 margin-top: 0;
                 border-bottom: 2px solid var(--secondary);
                 padding-bottom: 10px;
@@ -69,7 +88,6 @@
                 margin: 0px;
             }
 
-            /* Code editor layout */
             .editor-wrapper {
                 display: flex;
                 border: 1px solid #ccc;
@@ -86,7 +104,7 @@
                 color: var(--gutter-text);
                 font-family: 'Courier New', Courier, monospace;
                 font-size: 14px;
-                line-height: 20px; /* Must match textarea line-height */
+                line-height: 20px;
                 user-select: none;
                 border-right: 1px solid #ddd;
             }
@@ -97,7 +115,7 @@
                 padding: 10px;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: 14px;
-                line-height: 20px; /* Must match line-numbers line-height */
+                line-height: 20px;
                 box-sizing: border-box;
                 resize: vertical;
                 outline: none;
@@ -162,13 +180,38 @@
         <div class="container">
             <header>
                 <h1>Python Code Challenges</h1>
-                <p>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</p>
+                <div id="status-badge">Initializing Python Environment...</div>
+                <p>If you encounter issues running code on this site, please use this alternative: <a href="https://www.online-python.com/">https://www.online-python.com/</a></p>
+
+                <h2>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</h2>
             </header>
 
             <div id="challenge-list"></div>
         </div>
 
         <script>
+            // Check if BOTH Skulpt core and StdLib are loaded
+            function updateStatus() {
+                const badge = document.getElementById('status-badge');
+
+                const isCoreLoaded = typeof Sk !== 'undefined' && Sk.importMainWithBody;
+                const isStdLibLoaded = typeof Sk !== 'undefined' && Sk.builtinFiles && Sk.builtinFiles.files;
+                
+                if (isCoreLoaded && isStdLibLoaded) {
+                    badge.innerText = "● Python Engine Ready";
+                    badge.classList.add('ready');
+                } else {
+                    let errorMsg = "Engine Error: ";
+                    if (!isCoreLoaded && !isStdLibLoaded) errorMsg += "Skulpt & StdLib failed to load.";
+                    else if (!isCoreLoaded) errorMsg += "Core Skulpt failed to load.";
+                    else if (!isStdLibLoaded) errorMsg += "Python StdLib failed to load.";
+                    
+                    badge.innerText = errorMsg;
+                    badge.style.backgroundColor = "red";
+                    badge.style.color = "white";
+                }
+            }
+
             // 1. Fetch the challenges from the JSON file
             async function loadChallenges() {
                 try {
@@ -178,6 +221,14 @@
                     renderChallenges(challenges);
                 } catch (error) {
                     console.error("Error loading challenges:", error);
+                    const container = document.getElementById('challenge-list');
+
+                    let errorMsg = "Error loading challenges.yaml. "
+                    const isYamlLoaded = typeof jsyaml !== 'undefined' && jsyaml.load;
+                    if (!isYamlLoaded) errorMsg += "JS-YAML failed to load.";
+                    else errorMsg += "Please ensure the file exists in the same directory.";
+
+                    container.innerHTML = `<p style="color:red;">${errorMsg}</p>`;
                 }
             }
 
@@ -293,9 +344,10 @@
                 );
             }
 
-
-            // Initialize on load
-            window.onload = loadChallenges;
+            window.onload = function() {
+                updateStatus();
+                loadChallenges();
+            };
         </script>
     </body>
 </html>
