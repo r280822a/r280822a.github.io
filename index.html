@@ -197,7 +197,7 @@
 
                 const isCoreLoaded = typeof Sk !== 'undefined' && Sk.importMainWithBody;
                 const isStdLibLoaded = typeof Sk !== 'undefined' && Sk.builtinFiles && Sk.builtinFiles.files;
-                
+
                 if (isCoreLoaded && isStdLibLoaded) {
                     badge.innerText = "● Python Engine Ready";
                     badge.classList.add('ready');
@@ -206,7 +206,7 @@
                     if (!isCoreLoaded && !isStdLibLoaded) errorMsg += "Skulpt & StdLib failed to load.";
                     else if (!isCoreLoaded) errorMsg += "Core Skulpt failed to load.";
                     else if (!isStdLibLoaded) errorMsg += "Python StdLib failed to load.";
-                    
+
                     badge.innerText = errorMsg;
                     badge.style.backgroundColor = "red";
                     badge.style.color = "white";
@@ -237,11 +237,12 @@
             function renderChallenges(challenges) {
                 const container = document.getElementById('challenge-list');
 
-                challenges.forEach(ch => {
+                challenges.forEach((ch, index) => {
                     const card = document.createElement('div');
                     card.className = 'challenge-card';
+
                     card.innerHTML = `
-                        <h2>${ch.title}</h2>
+                        <h2>Challenge ${index+1}</h2>
                         <p><strong>Goal:</strong> ${ch.goal}</p>
                         <div class="code-container">
                             <pre><code>${ch.startingCode}</code></pre>
@@ -249,19 +250,19 @@
 
                         <p>Your attempt:</p>
                         <div class="editor-wrapper">
-                            <div id="line-numbers-${ch.id}" class="line-numbers">1</div>
-                            <textarea id="code-${ch.id}" oninput="updateLineNumbers(${ch.id})" placeholder="Type your code here..."></textarea>
+                            <div id="line-numbers-${index}" class="line-numbers">1</div>
+                            <textarea id="code-${index}" placeholder="Type your code here..."></textarea>
                         </div>
 
                         <div class="button-group">
-                            <button class="run-btn" onclick="runPython(${ch.id})">▶ Run Code</button>
-                            <button onclick="document.getElementById('sol-${ch.id}').classList.toggle('visible')">Show / Hide Solution</button>
+                            <button class="run-btn" onclick="runPython(${index})">▶ Run Code</button>
+                            <button id="btn-sol-${index}" style="display: none;" onclick="document.getElementById('sol-${index}').classList.toggle('visible')">Show / Hide Solution</button>
                         </div>
 
                         <p><strong>Output:</strong></p>
-                        <div id="output-${ch.id}" class="output-console"></div>
+                        <div id="output-${index}" class="output-console"></div>
 
-                        <div id="sol-${ch.id}" class="solution">
+                        <div id="sol-${index}" class="solution">
                             <p><strong>Solution:</strong> ${ch.solutionDesc}</p>
                             <div class="code-container">
                                 <pre><code>${ch.solutionCode}</code></pre>
@@ -270,10 +271,41 @@
                     `;
                     container.appendChild(card);
 
-                    // Set up indentation and line numbers for the new textarea
-                    const textarea = card.querySelector('textarea');
+                    const textarea = card.querySelector(`#code-${index}`);
                     enableTabIndentation(textarea);
-                    updateLineNumbers(ch.id);
+
+                    const solBtn = document.getElementById(`btn-sol-${index}`);
+                    const solutionDiv = document.getElementById(`sol-${index}`);
+
+                    // State trackers for timer
+                    let isTimeUp = false; 
+                    let timerStarted = false;
+                    // Start timer when the user clicks into the editor
+                    textarea.addEventListener('focus', function() {
+                        if (!timerStarted) {
+                            timerStarted = true;
+                            // timeLimit is amount of time before the solution reveals itself (in milliseconds)
+                            setTimeout(() => {
+                                isTimeUp = true;
+                                solBtn.style.display = 'inline-block';
+                            }, ch.timeLimit);
+                        }
+                    });
+
+                    textarea.addEventListener('input', function() {
+                        updateLineNumbers(index);
+
+                        // Show button if code matches exactly or time limit passed
+                        if (this.value.trim() === ch.solutionCode.trim() || isTimeUp) {
+                            solBtn.style.display = 'inline-block';
+                        } else {
+                            solBtn.style.display = 'none';
+                            solutionDiv.classList.remove('visible'); 
+                        }
+                    });
+
+                    // Initialize line numbers on first load
+                    updateLineNumbers(index);
                 });
             }
 

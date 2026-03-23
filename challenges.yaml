@@ -1,7 +1,6 @@
-- id: 1
-  title: "Challenge 1"
-  goal: "Reduce this 5 line program to just 2 lines using iteration."
-  solutionDesc: "Use a `for` loop instead of repeating the code!"
+- goal: "Reduce this 5 line program to just 2 lines."
+  solutionDesc: "Use a `for` loop instead of repeating the code! This is a core concept called iteration."
+  timeLimit: 0
   startingCode: |
     print("Hello World")
     print("Hello World")
@@ -12,10 +11,9 @@
     for i in range(5):
         print("Hello World")
 
-- id: 2
-  title: "Challenge 2"
-  goal: "You don't need to reduce the number of lines, but the logic can be simplified."
-  solutionDesc: "If `coins >= 50` is false, then coins MUST be less than 50. You don't need to check the condition again with `elif`. A regular `else` statement works fine here."
+- goal: "You don't need to reduce the number of lines, but the logic can be simplified."
+  solutionDesc: "If `coins >= 50` is false, then coins MUST be less than 50. You don't need to check the condition again with `elif`. A regular `else` statement acts as a catch-all."
+  timeLimit: 120000
   startingCode: |
     coins = 60
     if coins >= 50:
@@ -29,10 +27,9 @@
     else:
         print("Not enough coins.")
 
-- id: 3
-  title: "Challenge 3"
-  goal: "Reduce this 5 line program to just 3 lines using built-in functions."
+- goal: "Reduce this 5 line program to just 3 lines using a built-in function."
   solutionDesc: "Python has built-in functions that do the heavy lifting for you. Use `sum()` here."
+  timeLimit: 120000
   startingCode: |
     numbers = [5, 10, 15, 20]
     total = 0
