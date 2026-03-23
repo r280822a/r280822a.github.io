@@ -343,18 +343,59 @@
                 // Clear previous output
                 outputConsole.innerHTML = ""; 
 
-                // Configure Skulpt to intercept 'print' statements and errors
+                // Configure Skulpt to intercept 'print' statements, errors, and input
                 Sk.pre = `output-${challengeId}`;
                 Sk.configure({
                     output: function(text) {
-                        // Append output to the specific console
-                        outputConsole.innerHTML += text; 
+                        const textNode = document.createTextNode(text);
+                        outputConsole.appendChild(textNode);
                     },
                     read: function(x) {
                         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) {
                             throw "File not found: '" + x + "'";
                         }
                         return Sk.builtinFiles["files"][x];
+                    },
+                    inputfun: function(promptText) {
+                        return new Promise((resolve) => {
+                            // Display the prompt text
+                            const promptSpan = document.createElement('span');
+                            promptSpan.innerText = promptText;
+                            outputConsole.appendChild(promptSpan);
+
+                            // Create an inline input field
+                            const inputField = document.createElement('input');
+                            inputField.type = 'text';
+                            
+                            // Style it to blend seamlessly into the console
+                            inputField.style.background = 'transparent';
+                            inputField.style.color = 'var(--console-text)';
+                            inputField.style.border = 'none';
+                            inputField.style.outline = 'none';
+                            inputField.style.fontFamily = 'inherit';
+                            inputField.style.fontSize = 'inherit';
+                            inputField.style.width = '50%';
+
+                            outputConsole.appendChild(inputField);
+                            
+                            // Automatically focus the input box for the user
+                            inputField.focus();
+
+                            // Listen for the Enter key to submit the input
+                            inputField.addEventListener('keydown', function(e) {
+                                if (e.key === 'Enter') {
+                                    const userInput = inputField.value;
+
+                                    // Remove the input box and replace it with standard text
+                                    inputField.remove();
+                                    const resolvedText = document.createTextNode(userInput + '\n');
+                                    outputConsole.appendChild(resolvedText);
+
+                                    // Send the value back to the Python script
+                                    resolve(userInput);
+                                }
+                            });
+                        });
                     }
                 });
 
@@ -366,13 +407,16 @@
                 myPromise.then(
                     function(mod) {
                         // Code finished successfully
-                        if (outputConsole.innerHTML === "") {
-                            outputConsole.innerHTML = "Program finished. (No output to display)";
+                        if (outputConsole.childNodes.length === 0) {
+                            outputConsole.innerText = "Program finished. (No output to display)";
                         }
                     },
                     function(err) {
                         // Print error in red
-                        outputConsole.innerHTML = `<span style="color: red;">${err.toString()}</span>`;
+                        const errSpan = document.createElement('span');
+                        errSpan.style.color = 'red';
+                        errSpan.innerText = err.toString();
+                        outputConsole.appendChild(errSpan);
                     }
                 );
             }
