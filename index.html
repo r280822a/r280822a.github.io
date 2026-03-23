@@ -185,13 +185,14 @@
                 <p>If you encounter issues running code on this site, please use this alternative: <a href="https://www.online-python.com/">https://www.online-python.com/</a></p>
 
                 <h2>The code below works, but it takes up too many lines or otherwise needs improving. Can you optimize it?</h2>
+                <p>Click inside the code editor to begin the challenge. The solution button will appear once the correct code is entered or after an appropriate amount of time has passed.</p>
             </header>
 
             <div id="challenge-list"></div>
         </div>
 
         <script>
-            // Check if BOTH Skulpt core and StdLib are loaded
+            // Check if both Skulpt core and StdLib are loaded
             function updateStatus() {
                 const badge = document.getElementById('status-badge');
 
@@ -251,7 +252,7 @@
                         <p>Your attempt:</p>
                         <div class="editor-wrapper">
                             <div id="line-numbers-${index}" class="line-numbers">1</div>
-                            <textarea id="code-${index}" placeholder="Type your code here..."></textarea>
+                            <textarea id="code-${index}" placeholder="Type your code here...">${ch.startingCode}</textarea>
                         </div>
 
                         <div class="button-group">
@@ -277,18 +278,33 @@
                     const solBtn = document.getElementById(`btn-sol-${index}`);
                     const solutionDiv = document.getElementById(`sol-${index}`);
 
-                    // State trackers for timer
                     let isTimeUp = false; 
-                    let timerStarted = false;
-                    // Start timer when the user clicks into the editor
+                    let remainingTime = (ch.timeLimitMinutes || 0) * 60 * 1000;
+                    let timerInterval = null;
+                    let lastTick = 0;
+                    // Start or resume timer when user clicks into the editor
                     textarea.addEventListener('focus', function() {
-                        if (!timerStarted) {
-                            timerStarted = true;
-                            // timeLimit is amount of time before the solution reveals itself (in milliseconds)
-                            setTimeout(() => {
-                                isTimeUp = true;
-                                solBtn.style.display = 'inline-block';
-                            }, ch.timeLimit);
+                        if (!isTimeUp && !timerInterval) {
+                            lastTick = Date.now();
+                            timerInterval = setInterval(() => {
+                                const now = Date.now();
+                                remainingTime -= (now - lastTick);
+                                lastTick = now;
+
+                                if (remainingTime <= 0) {
+                                    clearInterval(timerInterval);
+                                    timerInterval = null;
+                                    isTimeUp = true;
+                                    solBtn.style.display = 'inline-block';
+                                }
+                            }, 100); // Check every 100ms
+                        }
+                    });
+                    // Pause timer when user clicks away
+                    textarea.addEventListener('blur', function() {
+                        if (timerInterval) {
+                            clearInterval(timerInterval);
+                            timerInterval = null;
                         }
                     });
 
