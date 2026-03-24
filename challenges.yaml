@@ -40,3 +40,343 @@
     numbers = [5, 10, 15, 20]
     total = sum(numbers)
     print(total)
+
+- goal: "Simplify this function so the `if` and `else` statements are completely removed."
+  solutionDesc: "The expression `number % 2 == 0` evaluates to `True` or `False` on its own! You can just return the result of the expression directly."
+  timeLimitMinutes: 4
+  startingCode: |
+    def is_even(number):
+        if number % 2 == 0:
+            return True
+        else:
+            return False
+    
+    print(is_even(10))
+    print(is_even(7))
+  solutionCode: |
+    def is_even(number):
+        return number % 2 == 0
+    
+    print(is_even(10))
+    print(is_even(7))
+
+- goal: "Turn this 4-line list creation into a single line of code."
+  solutionDesc: "In Python, you can multiply a list by an integer to duplicate its contents. This is a very 'Pythonic' way to initialize an array of a specific size."
+  timeLimitMinutes: 4
+  startingCode: |
+    zeros = []
+    for i in range(10):
+        zeros.append(0)
+    print(zeros)
+  solutionCode: |
+    zeros = [0] * 10
+    print(zeros)
+
+- goal: "This program logs a user in. The `process_login` and `get_domain` functions are fine, but `get_username` is doing things the hard way. Optimize `get_username` to a single line."
+  solutionDesc: "Instead of using a loop to build the string character by character, you can use the `.split()` string method just like the domain function does, but take the first part (index 0) instead."
+  timeLimitMinutes: 4
+  startingCode: |
+    def get_username(email):
+        username = ""
+        for char in email:
+            if char == "@":
+                break
+            username += char
+        return username
+    
+    def get_domain(email):
+        return email.split("@")[1]
+    
+    def process_login(email):
+        user = get_username(email)
+        domain = get_domain(email)
+        print("Logging in user: " + user)
+    
+    process_login("student123@school.ac.uk")
+  solutionCode: |
+    def get_username(email):
+        return email.split("@")[0]
+    
+    def get_domain(email):
+        return email.split("@")[1]
+    
+    def process_login(email):
+        user = get_username(email)
+        domain = get_domain(email)
+        print("Logging in user: " + user)
+    
+    process_login("student123@school.ac.uk")
+
+- goal: "This linear search works, but `is_student_present` keeps searching the list even AFTER it finds the student! Fix it so it stops searching immediately once the target is found."
+  solutionDesc: "As soon as `name == target_name` is True, you can `return True` immediately. This exits the function and stops the loop, saving processing time."
+  timeLimitMinutes: 5
+  startingCode: |
+    def get_student_list():
+        return ["Alice", "Bob", "Charlie", "Diana", "Eve"]
+    
+    def is_student_present(student_list, target_name):
+        found = False
+        for name in student_list:
+            if name == target_name:
+                found = True
+        return found
+    
+    def take_register():
+        students = get_student_list()
+        print(is_student_present(students, "Charlie"))
+    
+    take_register()
+  solutionCode: |
+    def get_student_list():
+        return ["Alice", "Bob", "Charlie", "Diana", "Eve"]
+    
+    def is_student_present(student_list, target_name):
+        for name in student_list:
+            if name == target_name:
+                return True
+        return False
+    
+    def take_register():
+        students = get_student_list()
+        print(is_student_present(students, "Charlie"))
+    
+    take_register()
+
+- goal: "The `calculate_total` function manually adds up 5 specific indexes. If the sensor data grows to 100 items, this will be a nightmare! Rewrite `calculate_total` to handle any size list."
+  solutionDesc: "Use iteration! A `for` loop will go through every item in the list automatically, no matter how long the list is. (Alternatively, just use `return sum(data)`!)"
+  timeLimitMinutes: 4
+  startingCode: |
+    def get_sensor_data():
+        return [12, 15, 14, 19, 22]
+    
+    def calculate_total(data):
+        total = 0
+        total += data[0]
+        total += data[1]
+        total += data[2]
+        total += data[3]
+        total += data[4]
+        return total
+    
+    def analyze_data():
+        data = get_sensor_data()
+        print("Total reading:", calculate_total(data))
+    
+    analyze_data()
+  solutionCode: |
+    def get_sensor_data():
+        return [12, 15, 14, 19, 22]
+    
+    def calculate_total(data):
+        total = 0
+        for reading in data:
+            total += reading
+        return total
+    
+    def analyze_data():
+        data = get_sensor_data()
+        print("Total reading:", calculate_total(data))
+    
+    analyze_data()
+
+- goal: "The `find_highest_score` function has a nested loop (a loop inside a loop). This is horribly inefficient and completely unnecessary for finding the maximum value. Fix it using a built in function."
+  solutionDesc: "You only need to loop through the array once to find the highest number. Nested loops are for 2D arrays (lists of lists) or sorting algorithms, not basic linear searches. Or, even better, just use Python's built in `max(scores)`."
+  timeLimitMinutes: 4
+  startingCode: |
+    def load_scores():
+        return [45, 82, 33, 91, 77, 21]
+    
+    def find_highest_score(scores):
+        highest = 0
+        for i in range(len(scores)):
+            for j in range(len(scores)):  # Why is this here?!
+                if scores[i] > highest:
+                    highest = scores[i]
+        return highest
+    
+    def display_results():
+        scores = load_scores()
+        print("Top score:", find_highest_score(scores))
+    
+    display_results()
+  solutionCode: |
+    def load_scores():
+        return [45, 82, 33, 91, 77, 21]
+    
+    def find_highest_score(scores):
+        return max(scores)
+    
+    def display_results():
+        scores = load_scores()
+        print("Top score:", find_highest_score(scores))
+    
+    display_results()
+
+- goal: "The `clean_data` function is very long and uses unnecessary variables. Can you shorten the inside of the `for` loop by chaining string methods together?"
+  solutionDesc: "String methods return a new string, meaning you can attach them to each other (e.g., `.strip().capitalize()`). You can also iterate over the list items directly instead of using index numbers."
+  timeLimitMinutes: 5
+  startingCode: |
+    def fetch_raw_names():
+        return ["  smith  ", "  JONES ", "williams  "]
+    
+    def clean_data(names):
+        cleaned = []
+        for i in range(len(names)):
+            current_name = names[i]
+            stripped_name = current_name.strip()
+            lower_name = stripped_name.lower()
+            cap_name = lower_name.capitalize()
+            cleaned.append(cap_name)
+        return cleaned
+    
+    def generate_report():
+        raw = fetch_raw_names()
+        print("Clean roster:", clean_data(raw))
+    
+    generate_report()
+  solutionCode: |
+    def fetch_raw_names():
+        return ["  smith  ", "  JONES ", "williams  "]
+    
+    def clean_data(names):
+        cleaned = []
+        for name in names:
+            cleaned.append(name.strip().capitalize())
+        return cleaned
+    
+    def generate_report():
+        raw = fetch_raw_names()
+        print("Clean roster:", clean_data(raw))
+    
+    generate_report()
+
+- goal: "There's a bug in the code. Can you fix the mistake?"
+  solutionDesc: "The game wants you to guess a number between 1 and 100 but the code is generating a number between 1 and 10. Change line `secret_number = random.randint(1, 10)` to correct this."
+  timeLimitMinutes: 6
+  startingCode: |
+    import random
+
+    def play_game():
+        print("="*40)
+        print("WELCOME TO THE GUESSING GAME!")
+        print("="*40)
+        print("I am thinking of a number between 1 and 100.")
+
+        secret_number = random.randint(1, 10)
+        attempts = 0
+        max_attempts = 10
+
+        while attempts < max_attempts:
+            guess_str = input(f"\nAttempt {attempts + 1}/{max_attempts} - Enter your guess: ")
+
+            # Check if the user actually entered a number
+            if not guess_str.isdigit():
+                print("Please enter a valid whole number.")
+                continue
+
+            guess = int(guess_str)
+            attempts += 1
+
+            # Game logic
+            if guess < secret_number:
+                print("Too low! Try a higher number.")
+            elif guess > secret_number:
+                print("Too high! Try a lower number.")
+            else:
+                print(f"CONGRATULATIONS! You guessed it in {attempts} attempts!")
+                return # Exit the function since the user won
+
+        # If the loop finishes without returning, the user ran out of attempts
+        print(f"\nGAME OVER! You ran out of attempts. The number was {secret_number}.")
+
+    # Main loop to allow replaying
+    while True:
+        play_game()
+
+        # Ask to play again
+        play_again = input("\nDo you want to play again? (y/n): ").strip().lower()
+        if play_again != 'y' and play_again != 'yes':
+            print("Thanks for playing! Goodbye.")
+            break
+  solutionCode: |
+    secret_number = random.randint(1, 100)
+
+- goal: "This function takes a first name and a last name, but we only want the initials (e.g., 'alan turing' becomes 'AT'). Fix the function to return just the capitalized initials."
+  solutionDesc: "Strings are essentially arrays of characters. You can access individual characters using indexing, just like a list! `name[0]` gives you the first letter. You can then concatenate them and use the `.upper()` method."
+  timeLimitMinutes: 3
+  startingCode: |
+    def get_initials(first_name, last_name):
+        initials = first_name + last_name
+        return initials
+
+    print(get_initials("alan", "turing"))
+    print(get_initials("ada", "lovelace"))
+  solutionCode: |
+    def get_initials(first_name, last_name):
+        return (first_name[0] + last_name[0]).upper()
+
+    print(get_initials("alan", "turing"))
+    print(get_initials("ada", "lovelace"))
+
+- goal: "This code tries to count how many 'X's are in the 2D grid (a seating plan), but it's causing an error because it's only checking the rows, not the individual seats. Fix the loops to correctly search the 2D list."
+  solutionDesc: "When iterating through a 2D list, you need a nested loop. The outer loop goes through the rows, and the inner loop goes through the individual elements (columns) inside that specific row."
+  timeLimitMinutes: 5
+  startingCode: |
+    seating_plan = [
+        ["O", "X", "O"],
+        ["X", "X", "O"],
+        ["O", "O", "O"]
+    ]
+
+    def count_taken_seats(grid):
+        count = 0
+        for i in range(len(grid)):
+            if grid[i] == "X":  # Bug is here!
+                count += 1
+        return count
+
+    print("Seats taken:", count_taken_seats(seating_plan))
+  solutionCode: |
+    seating_plan = [
+        ["O", "X", "O"],
+        ["X", "X", "O"],
+        ["O", "O", "O"]
+    ]
+
+    def count_taken_seats(grid):
+        count = 0
+        for row in grid:
+            for seat in row:
+                if seat == "X":
+                    count += 1
+        return count
+
+    print("Seats taken:", count_taken_seats(seating_plan))
+
+- goal: "We have a list of votes, but the `count_votes` function is just returning the total number of votes. Modify it to use a dictionary to count exactly how many votes *each* candidate got."
+  solutionDesc: "Dictionaries are great for tallying. Use the candidate's name as the key. If they are already in the dictionary, increase their count by 1. If they aren't, add them with a starting count of 1."
+  timeLimitMinutes: 6
+  startingCode: |
+    votes = ["Red", "Blue", "Red", "Green", "Blue", "Blue"]
+
+    def count_votes(vote_list):
+        results = {}
+        for vote in vote_list:
+            results[vote] = 1
+        print(results)
+        return results
+
+    count_votes(votes)
+  solutionCode: |
+    votes = ["Red", "Blue", "Red", "Green", "Blue", "Blue"]
+
+    def count_votes(vote_list):
+        results = {}
+        for vote in vote_list:
+            if vote in results:
+                results[vote] += 1
+            else:
+                results[vote] = 1
+        return results
+
+    count_votes(votes)
