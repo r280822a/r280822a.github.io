@@ -359,9 +359,9 @@
   startingCode: |
     votes = ["Red", "Blue", "Red", "Green", "Blue", "Blue"]
 
-    def count_votes(vote_list):
+    def count_votes(votes):
         results = {}
-        for vote in vote_list:
+        for vote in votes:
             results[vote] = 1
         print(results)
         return results
@@ -370,9 +370,9 @@
   solutionCode: |
     votes = ["Red", "Blue", "Red", "Green", "Blue", "Blue"]
 
-    def count_votes(vote_list):
+    def count_votes(votes):
         results = {}
-        for vote in vote_list:
+        for vote in votes:
             if vote in results:
                 results[vote] += 1
             else:
