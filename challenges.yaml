@@ -407,7 +407,6 @@
         results = {}
         for vote in votes:
             results[vote] = 1
-        print(results)
         return results
 
     print(count_votes(votes))
