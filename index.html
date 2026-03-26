@@ -7,6 +7,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -14,12 +15,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 
         <style>
+            /* --- CSS Variables / Theme --- */
             :root {
                 --primary: #0056b3;
                 --secondary: #dbeafe;
                 --bg-color: #f4f4f9;
                 --card-bg: #fff;
                 --text-color: black;
+                /* Editor & Code Styles */
                 --code-bg: #2d2d2d;
                 --code-text: #d4d4d4;
                 --console-bg: #000;
@@ -28,10 +31,12 @@
                 --editor-border: #ccc;
                 --gutter-bg: #f0f0f0;
                 --gutter-text: dimgray;
+                /* Status Colors */
                 --success: #28a745;
                 --warning: #ffc107;
             }
 
+            /* --- Base Layout --- */
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--bg-color);
@@ -40,6 +45,10 @@
                 margin: 0;
                 padding: 20px;
             }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
             header {
                 text-align: center;
                 margin-bottom: 40px;
@@ -47,6 +56,11 @@
             h1 {
                 color: var(--primary);
                 margin-bottom: 10px;
+            }
+            h2 {
+                margin-top: 0;
+                border-bottom: 2px solid var(--secondary);
+                padding-bottom: 10px;
             }
 
             #status-badge {
@@ -63,11 +77,6 @@
                 background-color: var(--success);
                 color: white;
             }
-
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-            }
             .challenge-card {
                 background: var(--card-bg);
                 border-radius: 8px;
@@ -75,11 +84,8 @@
                 margin-bottom: 30px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-            h2 {
-                margin-top: 0;
-                border-bottom: 2px solid var(--secondary);
-                padding-bottom: 10px;
-            }
+
+            /* --- Code Container & Editors --- */
             .code-container {
                 background-color: var(--code-bg);
                 color: var(--code-text);
@@ -93,7 +99,6 @@
                 margin: 0px !important;
                 padding: 0px !important;
             }
-
             .editor-wrapper {
                 display: flex;
                 border: 1px solid var(--editor-border);
@@ -130,6 +135,7 @@
                 overflow-x: auto;
             }
 
+            /* --- Buttons --- */
             .button-group {
                 display: flex;
                 gap: 10px;
@@ -147,16 +153,11 @@
                 margin-top: 10px;
                 transition: background-color 0.3s ease;
             }
-            button:hover {
-                background-color: #004494;
-            }
-            button.run-btn {
-                background-color: var(--success);
-            }
-            button.run-btn:hover {
-                background-color: #218838;
-            }
+            button:hover { background-color: #004494; }
+            button.run-btn { background-color: var(--success); }
+            button.run-btn:hover { background-color: #218838; }
 
+            /* --- Solution & Output --- */
             .solution {
                 display: none;
                 margin-top: 15px;
@@ -168,7 +169,6 @@
             .solution.visible {
                 display: block;
             }
-
             .output-console {
                 background-color: var(--console-bg);
                 color: var(--console-text);
@@ -197,10 +197,12 @@
         </div>
 
         <script>
-            // Check if both Skulpt core and StdLib are loaded
+            /**
+             * Verifies that the Skulpt core and standard library files have loaded properly.
+             * Updates the UI badge at the top of the page.
+             */
             function updateStatus() {
                 const badge = document.getElementById('status-badge');
-
                 const isCoreLoaded = typeof Sk !== 'undefined' && Sk.importMainWithBody;
                 const isStdLibLoaded = typeof Sk !== 'undefined' && Sk.builtinFiles && Sk.builtinFiles.files;
 
@@ -219,7 +221,9 @@
                 }
             }
 
-            // 1. Fetch the challenges from the YAML file
+            /**
+             * Fetches the challenge data from a local YAML file, parses it then calls renderChallenges().
+             */
             async function loadChallenges() {
                 try {
                     const response = await fetch('challenges.yaml');
@@ -232,6 +236,7 @@
 
                     let errorMsg = "Error loading challenges.yaml. "
                     const isYamlLoaded = typeof jsyaml !== 'undefined' && jsyaml.load;
+
                     if (!isYamlLoaded) errorMsg += "JS-YAML failed to load.";
                     else errorMsg += "Please ensure the file exists in the same directory.";
 
@@ -239,7 +244,10 @@
                 }
             }
 
-            // 2. Build the HTML for each card dynamically
+            /**
+             * Builds the HTML interface for each challenge based on the YAML data.
+             * Sets up the challenge cards, interactive code editor and solution revealing logic.
+             */
             function renderChallenges(challenges) {
                 const container = document.getElementById('challenge-list');
 
@@ -247,8 +255,9 @@
                     const card = document.createElement('div');
                     card.className = 'challenge-card';
 
+                    // Construct the HTML for the challenge card
                     card.innerHTML = `
-                        <h2>Challenge ${index+1}</h2>
+                        <h2>Challenge ${index + 1}</h2>
                         <p><strong>Goal:</strong> ${ch.goal}</p>
                         <div class="code-container">
                             <pre><code class="language-python">${ch.startingCode}</code></pre>
@@ -278,11 +287,11 @@
                     container.appendChild(card);
 
                     const textarea = card.querySelector(`#code-${index}`);
-                    enableTabIndentation(textarea);
 
                     const solBtn = document.getElementById(`btn-sol-${index}`);
                     const solutionDiv = document.getElementById(`sol-${index}`);
 
+                    // --- Timer Logic for Solution Button ---
                     let isTimeUp = false; 
                     let remainingTime = (ch.timeLimitMinutes || 0) * 60 * 1000;
                     let timerInterval = null;
@@ -313,15 +322,34 @@
                         }
                     });
 
+                    // Update line numbers along side and show solution when appropriate
                     textarea.addEventListener('input', function() {
                         updateLineNumbers(index);
 
-                        // Show button if code matches exactly or time limit passed
+                        // Show solution button if code matches exactly or time limit passed
                         if (this.value.trim() === ch.solutionCode.trim() || isTimeUp) {
                             solBtn.style.display = 'inline-block';
                         } else {
                             solBtn.style.display = 'none';
                             solutionDiv.classList.remove('visible'); 
+                        }
+                    });
+
+                    // Intercepts the Tab key in the textarea to insert spaces instead of moving browser focus to the next element.
+                    textarea.addEventListener('keydown', function(e) {
+                        if (e.key === 'Tab') {
+                            e.preventDefault(); // Stop focus from moving to next element
+                            const start = this.selectionStart;
+                            const end = this.selectionEnd;
+
+                            // Set textarea value to: text before caret + 4 spaces + text after caret
+                            this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+
+                            // Put caret in right position (after the indent)
+                            this.selectionStart = this.selectionEnd = start + 4;
+
+                            // Manually dispatch the input event so solution can be revealed when appropriate
+                            this.dispatchEvent(new Event('input', { bubbles: true }));
                         }
                     });
 
@@ -333,34 +361,23 @@
                 Prism.highlightAllUnder(container);
             }
 
-
-            // Updates the line numbers on the side based on textarea content
+            /**
+             * Dynamically generates the line numbers in the grey gutter beside the textarea.
+             */
             function updateLineNumbers(id) {
                 const textarea = document.getElementById(`code-${id}`);
                 const lineNumbers = document.getElementById(`line-numbers-${id}`);
                 if(!textarea || !lineNumbers) return;
+
                 const lines = textarea.value.split('\n').length;
                 lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
                 textarea.style.height = "auto";
             }
 
-            // Pressing tab in textarea indents line
-            function enableTabIndentation(textarea) {
-                textarea.addEventListener('keydown', function(e) {
-                    if (e.key === 'Tab') {
-                        e.preventDefault(); // Stop focus from moving to next element
-                        const start = this.selectionStart;
-                        const end = this.selectionEnd;
-
-                        // Set textarea value to: text before caret + 4 spaces + text after caret
-                        this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
-                        // Put caret in right position (after the indent)
-                        this.selectionStart = this.selectionEnd = start + 4;
-                    }
-                });
-            }
-
-            // Runs the Python code using Skulpt
+            /**
+             * Executes the Python code in the browser using the Skulpt library.
+             * Handles routing the console output and simulating the input() function.
+             */
             function runPython(challengeId) {
                 const code = document.getElementById(`code-${challengeId}`).value;
                 const outputConsole = document.getElementById(`output-${challengeId}`);
@@ -380,6 +397,7 @@
                         }
                         return Sk.builtinFiles["files"][x];
                     },
+                    // Handle Python's input() function asynchronously
                     inputfun: function(promptText) {
                         return new Promise((resolve) => {
                             // Display the prompt text
@@ -390,7 +408,7 @@
                             // Create an inline input field
                             const inputField = document.createElement('input');
                             inputField.type = 'text';
-                            
+
                             // Style it to blend seamlessly into the console
                             inputField.style.background = 'transparent';
                             inputField.style.color = 'var(--console-text)';
@@ -401,7 +419,7 @@
                             inputField.style.width = '50%';
 
                             outputConsole.appendChild(inputField);
-                            
+
                             // Automatically focus the input box for the user
                             inputField.focus();
 
@@ -445,6 +463,7 @@
                 );
             }
 
+            // Initialize upon loading the page
             window.onload = function() {
                 updateStatus();
                 loadChallenges();
