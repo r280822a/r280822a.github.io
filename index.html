@@ -9,6 +9,10 @@
         <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
         <style>
             :root {
                 --primary: #0056b3;
@@ -16,7 +20,7 @@
                 --bg-color: #f4f4f9;
                 --card-bg: #fff;
                 --text-color: black;
-                --code-bg: #1e1e1e;
+                --code-bg: #2d2d2d;
                 --code-text: #d4d4d4;
                 --console-bg: #000;
                 --console-text: #0f0;
@@ -86,7 +90,8 @@
                 margin: 15px 0;
             }
             pre {
-                margin: 0px;
+                margin: 0px !important;
+                padding: 0px !important;
             }
 
             .editor-wrapper {
@@ -214,7 +219,7 @@
                 }
             }
 
-            // 1. Fetch the challenges from the JSON file
+            // 1. Fetch the challenges from the YAML file
             async function loadChallenges() {
                 try {
                     const response = await fetch('challenges.yaml');
@@ -246,7 +251,7 @@
                         <h2>Challenge ${index+1}</h2>
                         <p><strong>Goal:</strong> ${ch.goal}</p>
                         <div class="code-container">
-                            <pre><code>${ch.startingCode}</code></pre>
+                            <pre><code class="language-python">${ch.startingCode}</code></pre>
                         </div>
 
                         <p>Your attempt:</p>
@@ -266,7 +271,7 @@
                         <div id="sol-${index}" class="solution">
                             <p><strong>Solution:</strong> ${ch.solutionDesc}</p>
                             <div class="code-container">
-                                <pre><code>${ch.solutionCode}</code></pre>
+                                <pre><code class="language-python">${ch.solutionCode}</code></pre>
                             </div>
                         </div>
                     `;
@@ -323,6 +328,9 @@
                     // Initialize line numbers on first load
                     updateLineNumbers(index);
                 });
+
+                // Tell Prism to highlight the newly injected static code blocks
+                Prism.highlightAllUnder(container);
             }
 
 
