@@ -287,7 +287,6 @@
                     container.appendChild(card);
 
                     const textarea = card.querySelector(`#code-${index}`);
-
                     const solBtn = document.getElementById(`btn-sol-${index}`);
                     const solutionDiv = document.getElementById(`sol-${index}`);
 
@@ -322,7 +321,7 @@
                         }
                     });
 
-                    // Update line numbers along side and show solution when appropriate
+                    // Update line numbers beside the textarea and show solution when appropriate
                     textarea.addEventListener('input', function() {
                         updateLineNumbers(index);
 

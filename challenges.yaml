@@ -397,7 +397,7 @@
 
     print("Seats taken:", count_taken_seats(seating_plan))
 
-- goal: "We have a list of votes, but the `count_votes` function is only assigning 1 vote to everyone. Modify it to use a dictionary to count exactly how many votes each candidate got."
+- goal: "We have a list of votes, but the `count_votes` function is only assigning 1 vote to everyone. Modify it to use a dictionary to accurately count how many votes each candidate got."
   solutionDesc: "Dictionaries are great for tallying. Use the candidate's name as the key. If they are already in the dictionary, increase their count by 1. If they aren't, add them with a starting count of 1."
   timeLimitMinutes: 6
   startingCode: |
