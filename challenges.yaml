@@ -1,4 +1,4 @@
-- goal: "Reduce this 5 line program to just 2 lines."
+- goal: "Reduce this 5 line program to just 2 lines while still making it print `Hello World` 5 times."
   solutionDesc: "Use a `for` loop instead of repeating the code! This is a core concept called iteration."
   timeLimitMinutes: 1
   startingCode: |
@@ -11,8 +11,8 @@
     for i in range(5):
         print("Hello World")
 
-- goal: "You don't need to reduce the number of lines, but the logic can be simplified."
-  solutionDesc: "If `coins >= 50` is false, then coins MUST be less than 50. You don't need to check the condition again with `elif`. A regular `else` statement acts as a catch-all."
+- goal: "You don't need to reduce the number of lines, but the logic can be simplified (hint: logic can be simplified on line 4)."
+  solutionDesc: "If `coins >= 50` is false, then coins MUST be less than 50. You don't need to check the condition again with `elif`. A regular `else` statement works fine."
   timeLimitMinutes: 2
   startingCode: |
     coins = 60
@@ -60,8 +60,8 @@
     print(is_even(10))
     print(is_even(7))
 
-- goal: "Turn this 4-line list creation into a single line of code."
-  solutionDesc: "In Python, you can multiply a list by an integer to duplicate its contents. This is a very 'Pythonic' way to initialize an array of a specific size."
+- goal: "Turn this 4 line list creation into 2 lines of code (1 line of code to create a list of 0s and another to print that list)."
+  solutionDesc: "In Python, you can multiply a list by an integer to duplicate its contents. This is a Python specific way to initialize an array of a specific size."
   timeLimitMinutes: 4
   startingCode: |
     zeros = []
@@ -108,7 +108,7 @@
     process_login("student123@school.ac.uk")
 
 - goal: "This linear search works, but `is_student_present` keeps searching the list even AFTER it finds the student! Fix it so it stops searching immediately once the target is found."
-  solutionDesc: "As soon as `name == target_name` is True, you can `return True` immediately. This exits the function and stops the loop, saving processing time."
+  solutionDesc: "As soon as `name == target_name` is True, you can `return True` immediately. This exits the function and stops the loop, saving processing time. You could also use `break` here but returning True is better since you don't need to store `found`."
   timeLimitMinutes: 5
   startingCode: |
     def get_student_list():
@@ -142,8 +142,8 @@
     
     take_register()
 
-- goal: "The `calculate_total` function manually adds up 5 specific indexes. If the sensor data grows to 100 items, this will be a nightmare! Rewrite `calculate_total` to handle any size list."
-  solutionDesc: "Use iteration! A `for` loop will go through every item in the list automatically, no matter how long the list is. (Alternatively, just use `return sum(data)`!)"
+- goal: "The `calculate_total` function manually adds up 5 specific indexes. If the sensor data grows to 100 items, this will be a nightmare! Rewrite `calculate_total` to calculate the total for any size list."
+  solutionDesc: "Use iteration! A `for` loop will go through every item in the list automatically, no matter how long the list is (alternatively, just use `return sum(data)`)."
   timeLimitMinutes: 4
   startingCode: |
     def get_sensor_data():
@@ -189,7 +189,7 @@
     def find_highest_score(scores):
         highest = 0
         for i in range(len(scores)):
-            for j in range(len(scores)):  # Why is this here?!
+            for j in range(len(scores)):  # Why is this here?
                 if scores[i] > highest:
                     highest = scores[i]
         return highest
@@ -212,8 +212,8 @@
     
     display_results()
 
-- goal: "The `clean_data` function is very long and uses unnecessary variables. Can you shorten the inside of the `for` loop by chaining string methods together?"
-  solutionDesc: "String methods return a new string, meaning you can attach them to each other (e.g., `.strip().capitalize()`). You can also iterate over the list items directly instead of using index numbers."
+- goal: "The `clean_data` function is very long and uses unnecessary variables. Can you shorten the inside of the `for` loop by chaining the string methods together?"
+  solutionDesc: "String methods return a new string, meaning you can attach them to each other (e.g., `.strip().capitalize()`). You can also append items to a list directly instead of storing it as a variable first."
   timeLimitMinutes: 5
   startingCode: |
     def fetch_raw_names():
@@ -249,7 +249,7 @@
     
     generate_report()
 
-- goal: "There's a bug in the code. Can you fix the mistake?"
+- goal: "The code runs but there's a logic error in the code. Can you fix the mistake?"
   solutionDesc: "The game wants you to guess a number between 1 and 100 but `random.randint(1, 10)` is generating a number between 1 and 10. Change `random.randint(1, 10)` to `random.randint(1, 100)` to correct this."
   timeLimitMinutes: 6
   startingCode: |
@@ -343,7 +343,7 @@
             print("Thanks for playing! Goodbye.")
             break
 
-- goal: "This function takes a first name and a last name, but we only want the initials (e.g., 'alan turing' becomes 'AT'). Fix the function to return just the capitalized initials."
+- goal: "This function takes a first name and a last name and returns only the initials (e.g., 'alan turing' becomes 'AT'). Fix the function to return just the capitalized initials."
   solutionDesc: "Strings are essentially arrays of characters. You can access individual characters using indexing, just like a list! `name[0]` gives you the first letter. You can then concatenate them and use the `.upper()` method."
   timeLimitMinutes: 3
   startingCode: |
@@ -397,7 +397,7 @@
 
     print("Seats taken:", count_taken_seats(seating_plan))
 
-- goal: "We have a list of votes, but the `count_votes` function is just returning the total number of votes. Modify it to use a dictionary to count exactly how many votes *each* candidate got."
+- goal: "We have a list of votes, but the `count_votes` function is only assigning 1 vote to everyone. Modify it to use a dictionary to count exactly how many votes each candidate got."
   solutionDesc: "Dictionaries are great for tallying. Use the candidate's name as the key. If they are already in the dictionary, increase their count by 1. If they aren't, add them with a starting count of 1."
   timeLimitMinutes: 6
   startingCode: |
