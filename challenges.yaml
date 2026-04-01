@@ -8,7 +8,7 @@
     fruits = ["Apple", "Banana", "Cherry"]
     print(fruits[0])
 
-- goal: "This code is meant to print 'Go outside' if it is sunny AND not raining. It currently prints the wrong thing. Fix the logic. Once you've fixed the logic, try to make the code run without the `== False`."
+- goal: "This code is meant to print 'Go outside' if it is sunny AND not raining. It currently prints the wrong thing. Fix the logic. Once you've fixed the logic, try to make the code work without the `== False`."
   solutionDesc: "The logical operator `or` was used instead of `and`. For both conditions to be true, `and` is required."
   timeLimitMinutes: 1
   startingCode: |
@@ -68,7 +68,7 @@
     pay = calculate_discount(100)
     print(pay)
 
-- goal: "Rewrite this complex 'Even or Odd' checker into just 3 lines. Research how to use the modulo operator `%` in Python and what it does."
+- goal: "Rewrite this complex 'Even or Odd' checker into just 3 lines. Research what the modulo operator `%` does in Python and how to calculate if a number is even with it."
   solutionDesc: "Using the modulo operator `%` allows you to find the remainder. If `num % 2 == 0`, the number is even."
   timeLimitMinutes: 4
   startingCode: |
@@ -125,7 +125,7 @@
 
     print(count_votes(votes))
 
-- goal: "The program currently outputs an error. Make it output the ASCII art for a robot."
+- goal: "The program currently outputs an error. Make it output the ASCII art for a robot. Then make it ask the user for which art they want to print"
   solutionDesc: "The function `print_ascii_art(style)` needs a `style` to be passed to it. Currently the code just calls `print_ascii_art()` without passing anything to it. Change it to `print_ascii_art('robot')` to fix this."
   timeLimitMinutes: 4
   startingCode: |
@@ -184,8 +184,8 @@
 
         print(art)
 
-    print("Beep Boop:")
-    print_ascii_art(robot)
+    art = input("Which art do you want to print? ")
+    print_ascii_art(art)
 
 - goal: "The code runs fine except outputs an error when you try to view the map. Fix it so there's no error when you use the map command"
   solutionDesc: "The error happened because the `display_map` function was expecting `current_room` as input but the game was calling it without sending. By changing the command from `display_map()` to `display_map(current_room)`, we 'pass' the player's location to the function so it can correctly place the (X) on the map without breaking."
