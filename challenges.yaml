@@ -1,401 +1,102 @@
-- goal: "Reduce this 5 line program to just 2 lines while still making it print `Hello World` 5 times."
-  solutionDesc: "Use a `for` loop instead of repeating the code! This is a core concept called iteration."
+- goal: "The student wants to print 'Apple' from the list but the code prints 'Banana'. Fix the index."
+  solutionDesc: "Computers use zero-based indexing. The first item in a list is at index `0`, not `1`."
   timeLimitMinutes: 1
   startingCode: |
-    print("Hello World")
-    print("Hello World")
-    print("Hello World")
-    print("Hello World")
-    print("Hello World")
+    fruits = ["Apple", "Banana", "Cherry"]
+    print(fruits[1])
   solutionCode: |
-    for i in range(5):
-        print("Hello World")
+    fruits = ["Apple", "Banana", "Cherry"]
+    print(fruits[0])
 
-- goal: "You don't need to reduce the number of lines, but the logic can be simplified (hint: logic can be simplified on line 4)."
-  solutionDesc: "If `coins >= 50` is false, then coins MUST be less than 50. You don't need to check the condition again with `elif`. A regular `else` statement works fine."
+- goal: "This code is meant to print 'Go outside' if it is sunny AND not raining. It currently prints the wrong thing. Fix the logic. Once you've fixed the logic, try to make the code run without the `== False`."
+  solutionDesc: "The logical operator `or` was used instead of `and`. For both conditions to be true, `and` is required."
+  timeLimitMinutes: 1
+  startingCode: |
+    is_sunny = True
+    is_raining = False
+    if is_sunny or is_raining == False:
+        print("Go outside")
+  solutionCode: |
+    is_sunny = True
+    is_raining = False
+    if is_sunny and not is_raining:
+        print("Go outside")
+
+- goal: "The program crashes when the user enters a number. Fix it so it correctly adds 10 to the user's input."
+  solutionDesc: "The `input()` function always returns a string. You must cast it to an integer using `int()` before performing calculations."
   timeLimitMinutes: 2
   startingCode: |
-    coins = 60
-    if coins >= 50:
-        print("You have enough!")
-    elif coins < 50:
-        print("Not enough coins.")
+    num = input("Enter a number: ")
+    total = num + 10
+    print(total)
   solutionCode: |
-    coins = 60
-    if coins >= 50:
-        print("You have enough!")
-    else:
-        print("Not enough coins.")
+    num = int(input("Enter a number: "))
+    total = num + 10
+    print(total)
 
-- goal: "Reduce this 5 line program to just 3 lines using a built-in function."
-  solutionDesc: "Python has built-in functions that do the heavy lifting for you. Use `sum()` here."
+- goal: "The `check_password` function is too long. Simplify the logic into a single line of code. Also make it print `True` by changing `check_password()` inside the print statement"
+  solutionDesc: "Since the condition `password == 'Secret123'` already evaluates to a Boolean (True or False), you can simply return that comparison directly."
   timeLimitMinutes: 3
   startingCode: |
-    numbers = [5, 10, 15, 20]
-    total = 0
-    for num in numbers:
-      total = total + num
-    print(total)
-  solutionCode: |
-    numbers = [5, 10, 15, 20]
-    total = sum(numbers)
-    print(total)
-
-- goal: "Simplify this function so the `if` and `else` statements are completely removed."
-  solutionDesc: "The expression `number % 2 == 0` evaluates to `True` or `False` on its own! You can just return the result of the expression directly."
-  timeLimitMinutes: 4
-  startingCode: |
-    def is_even(number):
-        if number % 2 == 0:
+    def check_password(password):
+        if password == "Secret123":
             return True
         else:
             return False
-    
-    print(is_even(10))
-    print(is_even(7))
-  solutionCode: |
-    def is_even(number):
-        return number % 2 == 0
-    
-    print(is_even(10))
-    print(is_even(7))
 
-- goal: "Turn this 4 line list creation into 2 lines of code (1 line of code to create a list of 0s and another to print that list)."
-  solutionDesc: "In Python, you can multiply a list by an integer to duplicate its contents. This is a Python specific way to initialize an array of a specific size."
+    print(check_password("password"))
+  solutionCode: |
+    def check_password(password):
+        return password == "Secret123"
+
+    print(check_password("Secret123"))
+
+- goal: "The code is meant to calculate a 10% discount, but the output is 'None'. Fix the function."
+  solutionDesc: "The variable was calculated inside the function but never returned. Use `return` to pass values back to the caller."
+  timeLimitMinutes: 2
+  startingCode: |
+    def calculate_discount(bill):
+        result = bill * 0.9
+
+    pay = calculate_discount(100)
+    print(pay)
+  solutionCode: |
+    def calculate_discount(bill):
+        result = bill * 0.9
+        return result
+
+    pay = calculate_discount(100)
+    print(pay)
+
+- goal: "Rewrite this complex 'Even or Odd' checker into just 3 lines. Research how to use the modulo operator `%` in Python and what it does."
+  solutionDesc: "Using the modulo operator `%` allows you to find the remainder. If `num % 2 == 0`, the number is even."
   timeLimitMinutes: 4
   startingCode: |
-    zeros = []
-    for i in range(10):
-        zeros.append(0)
-    print(zeros)
+    num = 10
+    if (num / 2) == int(num / 2):
+        print("Even")
+    else:
+        print("Odd")
   solutionCode: |
-    zeros = [0] * 10
-    print(zeros)
+    num = 10
+    if num % 2 == 0:
+        print("Even")
+    else:
+        print("Odd")
 
-- goal: "This program logs a user in. The `process_login` and `get_domain` functions are fine, but `get_username` is doing things the hard way. Optimize `get_username` to a single line."
-  solutionDesc: "Instead of using a loop to build the string character by character, you can use the `.split()` string method just like the domain function does, but take the first part (index 0) instead."
+- goal: "This function checks if 'Python' is in a list. It works, but it's 6 lines long. Reduce it to 2 lines. Research how to search for an item in a list in Python."
+  solutionDesc: "Python has a built-in `in` keyword that handles membership testing much more efficiently than a manual loop."
   timeLimitMinutes: 4
   startingCode: |
-    def get_username(email):
-        username = ""
-        for char in email:
-            if char == "@":
-                break
-            username += char
-        return username
-    
-    def get_domain(email):
-        return email.split("@")[1]
-    
-    def process_login(email):
-        user = get_username(email)
-        domain = get_domain(email)
-        print("Logging in user: " + user)
-    
-    process_login("student123@school.ac.uk")
+    langs = ["C++", "Java", "Python", "Ruby"]
+    found = False
+    for l in langs:
+        if l == "Python":
+            found = True
+    print(found)
   solutionCode: |
-    def get_username(email):
-        return email.split("@")[0]
-    
-    def get_domain(email):
-        return email.split("@")[1]
-    
-    def process_login(email):
-        user = get_username(email)
-        domain = get_domain(email)
-        print("Logging in user: " + user)
-    
-    process_login("student123@school.ac.uk")
-
-- goal: "This linear search works, but `is_student_present` keeps searching the list even AFTER it finds the student! Fix it so it stops searching immediately once the target is found."
-  solutionDesc: "As soon as `name == target_name` is True, you can `return True` immediately. This exits the function and stops the loop, saving processing time. You could also use `break` here but returning True is better since you don't need to store `found`."
-  timeLimitMinutes: 5
-  startingCode: |
-    def get_student_list():
-        return ["Alice", "Bob", "Charlie", "Diana", "Eve"]
-    
-    def is_student_present(student_list, target_name):
-        found = False
-        for name in student_list:
-            if name == target_name:
-                found = True
-        return found
-    
-    def take_register():
-        students = get_student_list()
-        print(is_student_present(students, "Charlie"))
-    
-    take_register()
-  solutionCode: |
-    def get_student_list():
-        return ["Alice", "Bob", "Charlie", "Diana", "Eve"]
-    
-    def is_student_present(student_list, target_name):
-        for name in student_list:
-            if name == target_name:
-                return True
-        return False
-    
-    def take_register():
-        students = get_student_list()
-        print(is_student_present(students, "Charlie"))
-    
-    take_register()
-
-- goal: "The `calculate_total` function manually adds up 5 specific indexes. If the sensor data grows to 100 items, this will be a nightmare! Rewrite `calculate_total` to calculate the total for any size list."
-  solutionDesc: "Use iteration! A `for` loop will go through every item in the list automatically, no matter how long the list is (alternatively, just use `return sum(data)`)."
-  timeLimitMinutes: 4
-  startingCode: |
-    def get_sensor_data():
-        return [12, 15, 14, 19, 22]
-    
-    def calculate_total(data):
-        total = 0
-        total += data[0]
-        total += data[1]
-        total += data[2]
-        total += data[3]
-        total += data[4]
-        return total
-    
-    def analyze_data():
-        data = get_sensor_data()
-        print("Total reading:", calculate_total(data))
-    
-    analyze_data()
-  solutionCode: |
-    def get_sensor_data():
-        return [12, 15, 14, 19, 22]
-    
-    def calculate_total(data):
-        total = 0
-        for reading in data:
-            total += reading
-        return total
-    
-    def analyze_data():
-        data = get_sensor_data()
-        print("Total reading:", calculate_total(data))
-    
-    analyze_data()
-
-- goal: "The `find_highest_score` function has a nested loop (a loop inside a loop). This is horribly inefficient and completely unnecessary for finding the maximum value. Fix it using a built in function."
-  solutionDesc: "You only need to loop through the array once to find the highest number. Nested loops are for 2D arrays (lists of lists) or sorting algorithms, not basic linear searches. Or, even better, just use Python's built in `max(scores)`."
-  timeLimitMinutes: 4
-  startingCode: |
-    def load_scores():
-        return [45, 82, 33, 91, 77, 21]
-    
-    def find_highest_score(scores):
-        highest = 0
-        for i in range(len(scores)):
-            for j in range(len(scores)):  # Why is this here?
-                if scores[i] > highest:
-                    highest = scores[i]
-        return highest
-    
-    def display_results():
-        scores = load_scores()
-        print("Top score:", find_highest_score(scores))
-    
-    display_results()
-  solutionCode: |
-    def load_scores():
-        return [45, 82, 33, 91, 77, 21]
-    
-    def find_highest_score(scores):
-        return max(scores)
-    
-    def display_results():
-        scores = load_scores()
-        print("Top score:", find_highest_score(scores))
-    
-    display_results()
-
-- goal: "The `clean_data` function is very long and uses unnecessary variables. Can you shorten the inside of the `for` loop by chaining the string methods together?"
-  solutionDesc: "String methods return a new string, meaning you can attach them to each other (e.g., `.strip().capitalize()`). You can also append items to a list directly instead of storing it as a variable first."
-  timeLimitMinutes: 5
-  startingCode: |
-    def fetch_raw_names():
-        return ["  smith  ", "  JONES ", "williams  "]
-    
-    def clean_data(names):
-        cleaned = []
-        for name in names:
-            stripped_name = name.strip()
-            lower_name = stripped_name.lower()
-            cap_name = lower_name.capitalize()
-            cleaned.append(cap_name)
-        return cleaned
-    
-    def generate_report():
-        raw = fetch_raw_names()
-        print("Clean roster:", clean_data(raw))
-    
-    generate_report()
-  solutionCode: |
-    def fetch_raw_names():
-        return ["  smith  ", "  JONES ", "williams  "]
-    
-    def clean_data(names):
-        cleaned = []
-        for name in names:
-            cleaned.append(name.strip().capitalize())
-        return cleaned
-    
-    def generate_report():
-        raw = fetch_raw_names()
-        print("Clean roster:", clean_data(raw))
-    
-    generate_report()
-
-- goal: "The code runs but there's a logic error in the code. Can you fix the mistake?"
-  solutionDesc: "The game wants you to guess a number between 1 and 100 but `random.randint(1, 10)` is generating a number between 1 and 10. Change `random.randint(1, 10)` to `random.randint(1, 100)` to correct this."
-  timeLimitMinutes: 6
-  startingCode: |
-    import random
-
-    def play_game():
-        print("="*40)
-        print("WELCOME TO THE GUESSING GAME!")
-        print("="*40)
-        print("I am thinking of a number between 1 and 100.")
-
-        secret_number = random.randint(1, 10)
-        attempts = 0
-        max_attempts = 10
-
-        while attempts < max_attempts:
-            guess_str = input(f"\nAttempt {attempts + 1}/{max_attempts} - Enter your guess: ")
-
-            # Check if the user actually entered a number
-            if not guess_str.isdigit():
-                print("Please enter a valid whole number.")
-                continue
-
-            guess = int(guess_str)
-            attempts += 1
-
-            # Game logic
-            if guess < secret_number:
-                print("Too low! Try a higher number.")
-            elif guess > secret_number:
-                print("Too high! Try a lower number.")
-            else:
-                print(f"CONGRATULATIONS! You guessed it in {attempts} attempts!")
-                return # Exit the function since the user won
-
-        # If the loop finishes without returning, the user ran out of attempts
-        print(f"\nGAME OVER! You ran out of attempts. The number was {secret_number}.")
-
-    # Main loop to allow replaying
-    while True:
-        play_game()
-
-        # Ask to play again
-        play_again = input("\nDo you want to play again? (y/n): ").strip().lower()
-        if play_again != 'y' and play_again != 'yes':
-            print("Thanks for playing! Goodbye.")
-            break
-  solutionCode: |
-    import random
-
-    def play_game():
-        print("="*40)
-        print("WELCOME TO THE GUESSING GAME!")
-        print("="*40)
-        print("I am thinking of a number between 1 and 100.")
-
-        secret_number = random.randint(1, 100)
-        attempts = 0
-        max_attempts = 10
-
-        while attempts < max_attempts:
-            guess_str = input(f"\nAttempt {attempts + 1}/{max_attempts} - Enter your guess: ")
-
-            # Check if the user actually entered a number
-            if not guess_str.isdigit():
-                print("Please enter a valid whole number.")
-                continue
-
-            guess = int(guess_str)
-            attempts += 1
-
-            # Game logic
-            if guess < secret_number:
-                print("Too low! Try a higher number.")
-            elif guess > secret_number:
-                print("Too high! Try a lower number.")
-            else:
-                print(f"CONGRATULATIONS! You guessed it in {attempts} attempts!")
-                return # Exit the function since the user won
-
-        # If the loop finishes without returning, the user ran out of attempts
-        print(f"\nGAME OVER! You ran out of attempts. The number was {secret_number}.")
-
-    # Main loop to allow replaying
-    while True:
-        play_game()
-
-        # Ask to play again
-        play_again = input("\nDo you want to play again? (y/n): ").strip().lower()
-        if play_again != 'y' and play_again != 'yes':
-            print("Thanks for playing! Goodbye.")
-            break
-
-- goal: "This function takes a first name and a last name and returns only the initials (e.g., 'alan turing' becomes 'AT'). Fix the function to return just the capitalized initials."
-  solutionDesc: "Strings are essentially arrays of characters. You can access individual characters using indexing, just like a list! `name[0]` gives you the first letter. You can then concatenate them and use the `.upper()` method."
-  timeLimitMinutes: 3
-  startingCode: |
-    def get_initials(first_name, last_name):
-        initials = first_name[1] + last_name[1]
-        return initials
-
-    print(get_initials("alan", "turing"))
-    print(get_initials("ada", "lovelace"))
-  solutionCode: |
-    def get_initials(first_name, last_name):
-        initials = first_name[0].capitalize() + last_name[0].capitalize()
-        return initials
-
-    print(get_initials("alan", "turing"))
-    print(get_initials("ada", "lovelace"))
-
-- goal: "This code tries to count how many 'X's are in the 2D grid (a seating plan), but it's causing an error because it's only checking the rows, not the individual seats. Fix the loops to correctly search the 2D list."
-  solutionDesc: "When iterating through a 2D list, you need a nested loop. The outer loop goes through the rows, and the inner loop goes through the individual elements (columns) inside that specific row."
-  timeLimitMinutes: 5
-  startingCode: |
-    seating_plan = [
-        ["O", "X", "O"],
-        ["X", "X", "O"],
-        ["O", "O", "O"]
-    ]
-
-    def count_taken_seats(grid):
-        count = 0
-        for row in grid:
-            print(row)
-            if row == "X":  # Bug is here!
-                count += 1
-        return count
-
-    print("Seats taken:", count_taken_seats(seating_plan))
-  solutionCode: |
-    seating_plan = [
-        ["O", "X", "O"],
-        ["X", "X", "O"],
-        ["O", "O", "O"]
-    ]
-
-    def count_taken_seats(grid):
-        count = 0
-        for row in grid:
-            for seat in row:
-                if seat == "X":
-                    count += 1
-        return count
-
-    print("Seats taken:", count_taken_seats(seating_plan))
+    langs = ["C++", "Java", "Python", "Ruby"]
+    print("Python" in langs)
 
 - goal: "We have a list of votes, but the `count_votes` function is only assigning 1 vote to everyone. Modify it to use a dictionary to accurately count how many votes each candidate got."
   solutionDesc: "Dictionaries are great for tallying. Use the candidate's name as the key. If they are already in the dictionary, increase their count by 1. If they aren't, add them with a starting count of 1."
@@ -423,3 +124,266 @@
         return results
 
     print(count_votes(votes))
+
+- goal: "The program currently outputs an error. Make it output the ASCII art for a robot."
+  solutionDesc: "The function `print_ascii_art(style)` needs a `style` to be passed to it. Currently the code just calls `print_ascii_art()` without passing anything to it. Change it to `print_ascii_art('robot')` to fix this."
+  timeLimitMinutes: 4
+  startingCode: |
+    def print_ascii_art(style):
+        # Prints specified ASCII art
+        if style.lower() == "robot":
+            art = """
+             [o_o]
+            /|_|_|\\
+            """
+        elif style.lower() == "cat":
+            art = """
+            |\---/|
+            | o_o |
+             \_^_/
+            """
+        elif style.lower() == "tea":
+            art = """
+            (  )  (  )
+            )  (  )  (
+            __________
+           |          |]
+            \________/
+            """
+        else:
+            art = "Style not found! Try 'robot', 'cat', or 'coffee'."
+
+        print(art)
+
+    print("Beep Boop:")
+    print_ascii_art()
+  solutionCode: |
+    def print_ascii_art(style):
+        # Prints specified ASCII art
+        if style.lower() == "robot":
+            art = """
+            [o_o]
+            /|_|_|\\
+            """
+        elif style.lower() == "cat":
+            art = """
+            |\---/|
+            | o_o |
+            \_^_/
+            """
+        elif style.lower() == "tea":
+            art = """
+            (  )   (  )
+            )  (   )  (
+            __________
+            |          |]
+            \________/
+            """
+        else:
+            art = "Style not found! Try 'robot', 'cat', or 'coffee'."
+
+        print(art)
+
+    print("Beep Boop:")
+    print_ascii_art(robot)
+
+- goal: "The code runs fine except outputs an error when you try to view the map. Fix it so there's no error when you use the map command"
+  solutionDesc: "The error happened because the `display_map` function was expecting `current_room` as input but the game was calling it without sending. By changing the command from `display_map()` to `display_map(current_room)`, we 'pass' the player's location to the function so it can correctly place the (X) on the map without breaking."
+  timeLimitMinutes: 10
+  startingCode: |
+    def display_map(current_room):
+        # We define where the (X) should appear based on the room name
+        m = {
+            'Pit': "(X)" if current_room == 'Pit' else "[ ]",
+            'Hallway': "(X)" if current_room == 'Hallway' else "[ ]",
+            'Engine Room': "(X)" if current_room == 'Engine Room' else "[ ]",
+            'Escape Pod': "(X)" if current_room == 'Escape Pod' else "[ ]"
+        }
+
+        # A simple ASCII representation of the rooms
+        map_layout = f"""
+                STATION MAP:
+            
+                     {m['Pit']} Pit
+                      |
+        {m['Engine Room']} -------- {m['Hallway']} Hallway
+        Engine        |
+                     {m['Escape Pod']} Escape Pod (Goal)
+        """
+        print(map_layout)
+
+    def play_game():
+        rooms = {
+            'Pit': {'down': 'Hallway', 'item': 'keycard'},
+            'Hallway': {'up': 'Pit', 'right': 'Engine Room', 'down': 'Escape Pod', 'item': None},
+            'Engine Room': {'left': 'Hallway', 'item': 'wrench'},
+            'Escape Pod': {'up': 'Hallway', 'item': None}
+        }
+
+        current_room = 'Hallway'
+        inventory = []
+
+        print("--- SPACE STATION ESCAPE ---")
+        print("Commands: 'go [direction]', 'get [item]', or 'map'")
+
+        while True:
+            print("-" * 30)
+            print(f"Location: {current_room}")
+
+            # Room item description
+            item_here = rooms[current_room]['item']
+            if item_here:
+                print(f"You see a {item_here} here.")
+
+            player_input = input("> ").strip().lower().split(None, 1)
+
+            if not player_input:
+                continue
+
+            action = player_input[0]
+
+            # SHOW MAP COMMAND
+            if action == 'map':
+                display_map()
+                continue
+
+            # MOVEMENT
+            elif action == 'go':
+                direction = player_input[1] if len(player_input) > 1 else ""
+                if direction in rooms[current_room]:
+                    current_room = rooms[current_room][direction]
+
+                    if current_room == 'Escape Pod':
+                        if 'keycard' in inventory:
+                            print("\nSUCCESS! You swiped the card and escaped the station!")
+                            break
+                        else:
+                            print("\nThe pod door is locked. You need a keycard!")
+                            current_room = 'Hallway' # Send them back to the hallway
+                else:
+                    print("You can't go that way!")
+
+            # GET ITEMS
+            elif action == 'get':
+                target_item = player_input[1] if len(player_input) > 1 else ""
+                if item_here and target_item == item_here:
+                    inventory.append(item_here)
+                    rooms[current_room]['item'] = None
+                    print(f"Picked up: {target_item}")
+                else:
+                    print(f"There is no {target_item} here.")
+
+            elif action == 'exit':
+                break
+            else:
+                print("Unknown command. Type 'map' to see the layout.")
+
+    play_game()
+  solutionCode: |
+    def display_map(current_room):
+        # We define where the (X) should appear based on the room name
+        m = {
+            'Pit': "(X)" if current_room == 'Pit' else "[ ]",
+            'Hallway': "(X)" if current_room == 'Hallway' else "[ ]",
+            'Engine Room': "(X)" if current_room == 'Engine Room' else "[ ]",
+            'Escape Pod': "(X)" if current_room == 'Escape Pod' else "[ ]"
+        }
+
+        # A simple ASCII representation of the rooms
+        map_layout = f"""
+                STATION MAP:
+            
+                     {m['Pit']} Pit
+                      |
+        {m['Engine Room']} -------- {m['Hallway']} Hallway
+        Engine        |
+                     {m['Escape Pod']} Escape Pod (Goal)
+        """
+        print(map_layout)
+
+    def play_game():
+        rooms = {
+            'Pit': {'down': 'Hallway', 'item': 'keycard'},
+            'Hallway': {'up': 'Pit', 'right': 'Engine Room', 'down': 'Escape Pod', 'item': None},
+            'Engine Room': {'left': 'Hallway', 'item': 'wrench'},
+            'Escape Pod': {'up': 'Hallway', 'item': None}
+        }
+
+        current_room = 'Hallway'
+        inventory = []
+
+        print("--- SPACE STATION ESCAPE ---")
+        print("Commands: 'go [direction]', 'get [item]', or 'map'")
+
+        while True:
+            print("-" * 30)
+            print(f"Location: {current_room}")
+
+            # Room item description
+            item_here = rooms[current_room]['item']
+            if item_here:
+                print(f"You see a {item_here} here.")
+
+            player_input = input("> ").strip().lower().split(None, 1)
+
+            if not player_input:
+                continue
+
+            action = player_input[0]
+
+            # SHOW MAP COMMAND
+            if action == 'map':
+                display_map(current_room)
+                continue
+
+            # MOVEMENT
+            elif action == 'go':
+                direction = player_input[1].capitalize() if len(player_input) > 1 else ""
+                if direction in rooms[current_room]:
+                    current_room = rooms[current_room][direction]
+
+                    if current_room == 'Escape Pod':
+                        if 'keycard' in inventory:
+                            print("\nSUCCESS! You swiped the card and escaped the station!")
+                            break
+                        else:
+                            print("\nThe pod door is locked. You need a keycard!")
+                            current_room = 'Hallway' # Send them back to the hallway
+                else:
+                    print("You can't go that way!")
+
+            # GET ITEMS
+            elif action == 'get':
+                target_item = player_input[1] if len(player_input) > 1 else ""
+                if item_here and target_item == item_here:
+                    inventory.append(item_here)
+                    rooms[current_room]['item'] = None
+                    print(f"Picked up: {target_item}")
+                else:
+                    print(f"There is no {target_item} here.")
+
+            elif action == 'exit':
+                break
+            else:
+                print("Unknown command. Type 'map' to see the layout.")
+
+    play_game()
+
+- goal: "You have a list of names. You need to print the first letter of each name. Optimize this 5-line loop into just 2 lines."
+  solutionDesc: "List comprehension provides a concise way to create lists by performing an action on every item in an iterable."
+  timeLimitMinutes: 10
+  startingCode: |
+    names = ["Alice", "Bob", "Charlie"]
+    initials = []
+    for n in names:
+        initials.append(n[0])
+    print(initials)
+  solutionCode: |
+    names = ["Alice", "Bob", "Charlie"]
+    print([n[0] for n in names])
+
+- goal: "Write simple calculator app"
+  solutionDesc: ""
+  timeLimitMinutes: 15
+  startingCode: ""
+  solutionCode: ""
